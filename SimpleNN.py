@@ -5,7 +5,7 @@ import numpy as np
 
 # Define the network
 class SimpleNN(nn.Module):
-    def __init__(self, in_features = 2, hidden_size=8, out_features=1):
+    def __init__(self, in_features = 2, hidden_size=7, out_features=1):
         super(SimpleNN, self).__init__()
         self.hidden = nn.Linear(in_features, hidden_size)   # input: 2 → hidden layer
         #self.activation = nn.ReLU()              # nonlinearity
@@ -18,14 +18,15 @@ class SimpleNN(nn.Module):
         x = self.output(x)
         return x
 
+    def TrainingStep(self, x, y):
+        optimizer.zero_grad()
+        y_pred = self(x)
+        loss = loss_fn(y_pred, y)
+        loss.backward()
+        optimizer.step()
 
-def TrainingStep(x, y):
-    global y_pred
-    optimizer.zero_grad()
-    y_pred = model(x)
-    loss = loss_fn(y_pred, y)
-    loss.backward()
-    optimizer.step()
+model = SimpleNN(hidden_size=2, out_features=1)
+
 
 # Training Logic functions
 
@@ -45,8 +46,9 @@ def GenerateTrainingData():
     x1 = np.random.randint(0, 2)
     x2 = np.random.randint(0, 2)
     x = torch.tensor([[x1, x2]], dtype=torch.float32)  # input: 2 real numbers
+    #y = torch.tensor([[funcAnd(x1, x2), funcOr(x1, x2), funcXOr(x1, x2)]], dtype=torch.float32)  # target: 1 real number
     y = torch.tensor([[funcXOr(x1, x2)]], dtype=torch.float32)  # target: 1 real number
-    TrainingStep(x, y)
+    model.TrainingStep(x, y)
 
 
 def DoTraining(n):
@@ -55,16 +57,16 @@ def DoTraining(n):
     allInput = torch.tensor([[0, 0], [0, 1], [1, 0], [1, 1]], dtype=torch.float32)
     print("Iteration", n)
     print("Prediction:", model(allInput).detach().numpy().flatten())
-    for name, param in model.named_parameters():
-        print(name, param.data)
+    #for name, param in model.named_parameters():
+    #    print(name, param.data)
     print("--------")
 
 # Example usage
-model = SimpleNN(hidden_size=8)
+
 
 # Example optimizer and loss
 #optimizer = optim.Adam(model.parameters(), lr=0.01)
-optimizer = optim.SGD(model.parameters(), lr=0.01, weight_decay=0.0001)
+optimizer = optim.SGD(model.parameters(), lr=0.1, weight_decay=0.0001)
 loss_fn = nn.MSELoss()
 
 #Parametres to vary
