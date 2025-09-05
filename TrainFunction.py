@@ -84,7 +84,7 @@ def TrainDemonstration():
     DoTrainingFunc(100000)
     CalculateQualityFunc(1000)
 
-TrainDemonstration()
+#TrainDemonstration()
 
 
 
