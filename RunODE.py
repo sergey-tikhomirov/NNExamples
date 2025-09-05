@@ -7,22 +7,22 @@ import torch.optim as optim
 import numpy as np
 
 import SimpleNN
+import DeepNN
 import TrainFunction
 
 import matplotlib.pyplot as plt
 from sympy.stats.sampling.sample_numpy import numpy
 
-gamma = 0.2
+gamma = 0.4
 omega2 = 8.91
 
 delta = 0.1
 dim = 2
 
-vMin = -7
-vMax = 7
+
 
 nHidden = 6
-
+nHiddenDeep = 6
 
 #A = torch.tensor([[1.0, 1.0],
 #                  [1.0, -1.0]])
@@ -43,17 +43,39 @@ vMin = -2
 vMax = 2
 
 def RHS(xin):
+    #return dampedPendulum(xin)
     return linearSystem(xin)
+
+modelNNEuler = SimpleNN.SimpleNN(in_features = dim, hidden_size=nHidden, out_features=dim)
+#SimpleNN.optimizer = optim.SGD(modelNNEuler.parameters(), lr=0.01, weight_decay=0.0001)
+SimpleNN.optimizer = optim.Adam(modelNNEuler.parameters(), lr=0.01)
+SimpleNN.loss_fn = nn.MSELoss()
+
+modelNNEuler100 = SimpleNN.SimpleNN(in_features = dim, hidden_size=nHidden, out_features=dim)
 
 def linearSystem(xin):
     return xin @ A.T + b
 
-def dampedPendulum(xin):
-    # xyz: (..., 3)
-    x1, x2 = xin.unbind(dim=-1)          # each is shape (...)
-    dx1 = x2
-    dx2 = -gamma*x2 - omega2 * math.sin(x1)
-    return torch.stack((dx1, dx2), dim=-1)  # shape (..., 3)
+#################################
+
+#modelNNEuler = DeepNN.DeepNN(in_features = dim, hidden_size=nHiddenDeep, hidden_layer=3, out_features=dim)
+##SimpleNN.optimizer = optim.SGD(modelNNEuler.parameters(), lr=0.01, weight_decay=0.0001)
+#DeepNN.optimizer = optim.Adam(modelNNEuler.parameters(), lr=1.3)
+#DeepNN.loss_fn = nn.MSELoss()
+
+#modelNNEuler100 = DeepNN.DeepNN(in_features = dim, hidden_size=nHidden, hidden_layer=6, out_features=dim)
+
+#vMin = -7
+#vMax = 7
+
+#def dampedPendulum(xin):
+#    # xyz: (..., 3)
+#    x1, x2 = xin.unbind(dim=-1)          # each is shape (...)
+#    dx1 = x2
+#    dx2 = -gamma*x2 - omega2 * torch.sin(x1)
+#    return torch.stack((dx1, dx2), dim=-1)  # shape (..., 3)
+
+##########################################
 
 def Trajectory(xin, nSteps, func):
     res = xin
@@ -85,11 +107,6 @@ def TrajectoryEuler100(xin, nSteps):
 
 #######################################
 
-modelNNEuler = SimpleNN.SimpleNN(in_features = dim, hidden_size=nHidden, out_features=dim)
-#SimpleNN.optimizer = optim.SGD(modelNNEuler.parameters(), lr=0.01, weight_decay=0.0001)
-SimpleNN.optimizer = optim.Adam(modelNNEuler.parameters(), lr=0.01)
-SimpleNN.loss_fn = nn.MSELoss()
-
 def TrainNNEuler(nPoints):
     for i in range(nPoints):
         x = RandomPoint()
@@ -105,8 +122,6 @@ def TrajectoryNNEuler(xin, nSteps):
 ######################################################
 
 #######################################
-
-modelNNEuler100 = SimpleNN.SimpleNN(in_features = dim, hidden_size=nHidden, out_features=dim)
 
 def TrainNNEuler100(nPoints):
     for i in range(nPoints):
@@ -165,9 +180,9 @@ def DrawTrajectories():
     trajNNEuler = TrajectoryNNEuler(x3, 100)
     plotPoints(trajNNEuler, 'NNEuler:1000')
 
-    #TrainNNEuler(10000)
-    #trajNNEuler = TrajectoryNNEuler(x4, 100)
-    #plotPoints(trajNNEuler, 'NNEuler10000')
+    TrainNNEuler(10000)
+    trajNNEuler = TrajectoryNNEuler(x4, 100)
+    plotPoints(trajNNEuler, 'NNEuler10000')
 
     #TrainNNEuler100(1000)
     #trajNNEuler = TrajectoryNNEuler100(x5, 100)
@@ -182,8 +197,9 @@ def DrawTrajectories():
 
 def CalculateQualityFunc(numTests, model, func):
     inputs = vMin + (vMax - vMin) * torch.rand(numTests, dim)
+    inputs1 = inputs.clone()
     outputs = model(inputs)
-    trueOutput = func(inputs)
+    trueOutput = func(inputs1)
 
     print(outputs)
     print(trueOutput)
@@ -195,7 +211,7 @@ def CalculateQualityFunc(numTests, model, func):
     print('-------------')
 
 def TestNNEuler():
-    TrainNNEuler(10000)
+    TrainNNEuler(1000)
     CalculateQualityFunc(1000, modelNNEuler, EulerStep)
     #trajNNEuler = TrajectoryNNEuler(x3, 10)
     #plotPoints(trajNNEuler, 'NNEuler1000')
