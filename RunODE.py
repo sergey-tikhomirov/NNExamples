@@ -13,8 +13,7 @@ import TrainFunction
 import matplotlib.pyplot as plt
 from sympy.stats.sampling.sample_numpy import numpy
 
-gamma = 0.4
-omega2 = 8.91
+
 
 delta = 0.1
 dim = 2
@@ -34,11 +33,11 @@ nHiddenDeep = 6
 #vMin = -2
 #vMax = 1
 
-#A = torch.tensor([[0.0, -1.0],
-#                  [1.0, 0.0]])
-#b = torch.tensor([0, 0])
-#vMin = -2
-#vMax = 2
+A = torch.tensor([[0.0, -1.0],
+                  [1.0, 0.0]])
+b = torch.tensor([0, 0])
+vMin = -2
+vMax = 2
 
 def RHS(xin):
     return dampedPendulum(xin)
@@ -65,6 +64,8 @@ def linearSystem(xin):
 
 vMin = -7
 vMax = 7
+gamma = 0.4
+omega2 = 8.91
 
 def dampedPendulum(xin):
     x1, x2 = xin.unbind(dim=-1)          # each is shape (...)
@@ -132,10 +133,29 @@ def NNEuler100Step(xin):
 def TrajectoryNNEuler100(xin, nSteps):
     return Trajectory(xin, nSteps, NNEuler100Step)
 
+#######################################
+
+deepNNEuler100 = DeepNN.DeepNN(in_features = dim, hidden_layer = 6, hidden_size=30, out_features=dim)
+#SimpleNN.optimizer = optim.SGD(modelNNEuler.parameters(), lr=0.01, weight_decay=0.0001)
+DeepNN.optimizer = optim.Adam(deepNNEuler100.parameters(), lr=0.01)
+DeepNN.loss_fn = nn.MSELoss()
+
+def TrainDeepNNEuler100(nBlocks, blockSize = 1):
+    for i in range(nBlocks):
+        x = RandomPoint(blockSize)
+        y = Euler100Step(x)
+        deepNNEuler100.TrainingStep(x, y)
+
+def DeepNNEuler100Step(xin):
+    return deepNNEuler100(xin).detach()
+
+def TrajectoryDeepNNEuler100(xin, nSteps):
+    return Trajectory(xin, nSteps, DeepNNEuler100Step)
+
 ######################################################
 
-def RandomPoint():
-    return vMin + (vMax - vMin) * torch.rand(1, dim)
+def RandomPoint(blockSize = 1):
+    return vMin + (vMax - vMin) * torch.rand(blockSize, dim)
 
 def RandomPoint2():
     al = 1/1.42
@@ -160,13 +180,14 @@ def DrawTrajectories():
     x4 = x1.clone()
     x5 = x1.clone()
     x6 = x1.clone()
+    x7 = x1.clone()
 
     print(x1)
 
-    trajEuler = TrajectoryEuler(x1, 50)
-    plotPoints(trajEuler, 'Euler')
+    #trajEuler = TrajectoryEuler(x1, 50)
+    #plotPoints(trajEuler, 'Euler')
 
-    trajEuler = TrajectoryEuler100(x1, 50)
+    trajEuler = TrajectoryEuler100(x1, 100)
     plotPoints(trajEuler, 'EulerN')
 
     #TrainNNEuler(100)
@@ -177,17 +198,39 @@ def DrawTrajectories():
     #trajNNEuler = TrajectoryNNEuler(x3, 100)
     #plotPoints(trajNNEuler, 'NNEuler:1000')
 
-    TrainNNEuler(10000)
-    trajNNEuler = TrajectoryNNEuler(x4, 50)
-    plotPoints(trajNNEuler, 'NNEuler10000')
+    #TrainNNEuler(10000)
+    #trajNNEuler = TrajectoryNNEuler(x4, 50)
+    #plotPoints(trajNNEuler, 'NNEuler10000')
 
     #TrainNNEuler100(1000)
     #trajNNEuler = TrajectoryNNEuler100(x5, 100)
     #plotPoints(trajNNEuler, 'NNEulerN:1000')
 
-    TrainNNEuler100(10000)
-    trajNNEuler = TrajectoryNNEuler100(x6, 50)
-    plotPoints(trajNNEuler, 'NNEulerN:10000')
+    #TrainNNEuler100(10000)
+    #trajNNEuler = TrajectoryNNEuler100(x6, 50)
+    #plotPoints(trajNNEuler, 'NNEulerN:10000')
+
+    TrainDeepNNEuler100(1000, 1000)
+    trajDeepNNEuler = TrajectoryDeepNNEuler100(x7, 100)
+    plotPoints(trajDeepNNEuler, 'DeepNNEulerN:10000')
+
+#circle
+#good Sigmoid, layers = 2, size = 6, nBlocks = 1000, blockSize = 10
+#good ReLU, layers = 2, size = 6, nBlocks = 1000, blockSize = 10
+#good ReLU, layers = 3, size = 6, nBlocks = 1000, blockSize = 10
+#good ReLU, layers = 4, size = 6, nBlocks = 1000, blockSize = 10
+
+# pendulum
+# good Sigmoid, layers = 2, size = 40, nBlocks = 1000, blockSize = 100
+# bad Sigmoid, layers = 2, size = 20, nBlocks = 1000, blockSize = 100
+# bad Sigmoid, layers = 2, size = 20, nBlocks = 1000, blockSize = 1000
+# bad Sigmoid, layers = 2, size = 20, nBlocks = 10000, blockSize = 1000
+# good Sigmoid, layers = 2, size = 30, nBlocks = 10000, blockSize = 1000
+# good Sigmoid, layers = 2, size = 30, nBlocks = 1000, blockSize = 1000
+# bad Sigmoid, layers = 2, size = 30, nBlocks = 1000, blockSize = 100
+# good Sigmoid, layers = 3, size = 30, nBlocks = 1000, blockSize = 1000
+# good ReLU, layers = 3, size = 30, nBlocks = 1000, blockSize = 1000
+# good ReLU, layers = 6, size = 30, nBlocks = 1000, blockSize = 1000
 
     plt.legend()
     plt.show()

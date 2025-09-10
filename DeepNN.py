@@ -1,5 +1,7 @@
 import torch
 import torch.nn as nn
+from torch.optim import optimizer
+
 
 class DeepNN(nn.Module):
     def __init__(self, in_features=2, hidden_layer = 6, hidden_size=7, out_features=2):
@@ -16,8 +18,8 @@ class DeepNN(nn.Module):
         for _ in range(hidden_layer - 2):                      # now 1 + 4 = 5 hidden layers total
             self.hidden_layers.append(nn.Linear(hidden_size, hidden_size))
 
-        #self.activation = nn.ReLU()
-        self.activation = nn.Sigmoid()
+        self.activation = nn.ReLU()
+        #self.activation = nn.Sigmoid()
         self.output = nn.Linear(hidden_size, out_features)
 
     def forward(self, x):
