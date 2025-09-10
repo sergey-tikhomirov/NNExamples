@@ -19,9 +19,7 @@ omega2 = 8.91
 delta = 0.1
 dim = 2
 
-
-
-nHidden = 6
+nHidden = 20
 nHiddenDeep = 6
 
 #A = torch.tensor([[1.0, 1.0],
@@ -36,15 +34,15 @@ nHiddenDeep = 6
 #vMin = -2
 #vMax = 1
 
-A = torch.tensor([[0.0, -1.0],
-                  [1.0, 0.0]])
-b = torch.tensor([0, 0])
-vMin = -2
-vMax = 2
+#A = torch.tensor([[0.0, -1.0],
+#                  [1.0, 0.0]])
+#b = torch.tensor([0, 0])
+#vMin = -2
+#vMax = 2
 
 def RHS(xin):
-    #return dampedPendulum(xin)
-    return linearSystem(xin)
+    return dampedPendulum(xin)
+    #return linearSystem(xin)
 
 modelNNEuler = SimpleNN.SimpleNN(in_features = dim, hidden_size=nHidden, out_features=dim)
 #SimpleNN.optimizer = optim.SGD(modelNNEuler.parameters(), lr=0.01, weight_decay=0.0001)
@@ -65,15 +63,14 @@ def linearSystem(xin):
 
 #modelNNEuler100 = DeepNN.DeepNN(in_features = dim, hidden_size=nHidden, hidden_layer=6, out_features=dim)
 
-#vMin = -7
-#vMax = 7
+vMin = -7
+vMax = 7
 
-#def dampedPendulum(xin):
-#    # xyz: (..., 3)
-#    x1, x2 = xin.unbind(dim=-1)          # each is shape (...)
-#    dx1 = x2
-#    dx2 = -gamma*x2 - omega2 * torch.sin(x1)
-#    return torch.stack((dx1, dx2), dim=-1)  # shape (..., 3)
+def dampedPendulum(xin):
+    x1, x2 = xin.unbind(dim=-1)          # each is shape (...)
+    dx1 = x2
+    dx2 = -gamma*x2 - omega2 * torch.sin(x1)
+    return torch.stack((dx1, dx2), dim=-1)  # shape (..., 3)
 
 ##########################################
 
@@ -153,8 +150,8 @@ def plotPoints(pts, lbl):
         plt.ylabel('y')
         plt.title('2D points')
         ax = plt.gca()
-        ax.set_xlim(vMin, vMax)
-        ax.set_ylim(vMin, vMax)
+        ax.set_xlim(2*vMin, 2*vMax)
+        ax.set_ylim(2*vMin, 2*vMax)
 
 def DrawTrajectories():
     x1 = RandomPoint2()
@@ -166,31 +163,31 @@ def DrawTrajectories():
 
     print(x1)
 
-    trajEuler = TrajectoryEuler(x1, 100)
+    trajEuler = TrajectoryEuler(x1, 50)
     plotPoints(trajEuler, 'Euler')
 
-    #trajEuler = TrajectoryEuler100(x1, 100)
-    #plotPoints(trajEuler, 'EulerN')
+    trajEuler = TrajectoryEuler100(x1, 50)
+    plotPoints(trajEuler, 'EulerN')
 
-    TrainNNEuler(100)
-    trajNNEuler = TrajectoryNNEuler(x2, 100)
-    plotPoints(trajNNEuler, 'NNEuler:100')
+    #TrainNNEuler(100)
+    #trajNNEuler = TrajectoryNNEuler(x2, 50)
+    #plotPoints(trajNNEuler, 'NNEuler:100')
 
-    TrainNNEuler(1000)
-    trajNNEuler = TrajectoryNNEuler(x3, 100)
-    plotPoints(trajNNEuler, 'NNEuler:1000')
+    #TrainNNEuler(1000)
+    #trajNNEuler = TrajectoryNNEuler(x3, 100)
+    #plotPoints(trajNNEuler, 'NNEuler:1000')
 
     TrainNNEuler(10000)
-    trajNNEuler = TrajectoryNNEuler(x4, 100)
+    trajNNEuler = TrajectoryNNEuler(x4, 50)
     plotPoints(trajNNEuler, 'NNEuler10000')
 
     #TrainNNEuler100(1000)
     #trajNNEuler = TrajectoryNNEuler100(x5, 100)
     #plotPoints(trajNNEuler, 'NNEulerN:1000')
 
-    #TrainNNEuler100(10000)
-    #trajNNEuler = TrajectoryNNEuler100(x6, 100)
-    #plotPoints(trajNNEuler, 'NNEulerN:10000')
+    TrainNNEuler100(10000)
+    trajNNEuler = TrajectoryNNEuler100(x6, 50)
+    plotPoints(trajNNEuler, 'NNEulerN:10000')
 
     plt.legend()
     plt.show()
