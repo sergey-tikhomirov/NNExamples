@@ -8,8 +8,8 @@ class SimpleNN(nn.Module):
     def __init__(self, in_features = 2, hidden_size=7, out_features=1):
         super(SimpleNN, self).__init__()
         self.hidden = nn.Linear(in_features, hidden_size)   # input: 2 → hidden layer
-        self.activation = nn.ReLU()              # nonlinearity
-        #self.activation = nn.Sigmoid()              # nonlinearity
+        #self.activation = nn.ReLU()              # nonlinearity
+        self.activation = nn.Sigmoid()              # nonlinearity
         self.output = nn.Linear(hidden_size, out_features)  # hidden → output: 1 real number
 
     def forward(self, x):

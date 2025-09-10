@@ -4,12 +4,11 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="6e7ca3ba-20a5-4e7a-ad54-36bd737157ee" name="Changes" comment="Training Linear Euler">
-      <change beforePath="$PROJECT_DIR$/.idea/NNExamples.iml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/NNExamples.iml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/misc.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/misc.xml" afterDir="false" />
+    <list default="true" id="6e7ca3ba-20a5-4e7a-ad54-36bd737157ee" name="Changes" comment="Training DeepNonlinear">
+      <change afterPath="$PROJECT_DIR$/HeunStepNN.py" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/RunHeun.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/DeepNN.py" beforeDir="false" afterPath="$PROJECT_DIR$/DeepNN.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/RunODE.py" beforeDir="false" afterPath="$PROJECT_DIR$/RunODE.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/SimpleNN.py" beforeDir="false" afterPath="$PROJECT_DIR$/SimpleNN.py" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -49,24 +48,25 @@
     <option name="hideEmptyMiddlePackages" value="true" />
     <option name="showLibraryContents" value="true" />
   </component>
-  <component name="PropertiesComponent">{
-  &quot;keyToString&quot;: {
-    &quot;Python.LogicFunction.executor&quot;: &quot;Run&quot;,
-    &quot;Python.RunODE.executor&quot;: &quot;Run&quot;,
-    &quot;Python.SimpleNN.executor&quot;: &quot;Run&quot;,
-    &quot;Python.TrainFunction.executor&quot;: &quot;Run&quot;,
-    &quot;Python.main.executor&quot;: &quot;Run&quot;,
-    &quot;RunOnceActivity.ShowReadmeOnStart&quot;: &quot;true&quot;,
-    &quot;RunOnceActivity.git.unshallow&quot;: &quot;true&quot;,
-    &quot;git-widget-placeholder&quot;: &quot;master&quot;,
-    &quot;node.js.detected.package.eslint&quot;: &quot;true&quot;,
-    &quot;node.js.detected.package.tslint&quot;: &quot;true&quot;,
-    &quot;node.js.selected.package.eslint&quot;: &quot;(autodetect)&quot;,
-    &quot;node.js.selected.package.tslint&quot;: &quot;(autodetect)&quot;,
-    &quot;nodejs_package_manager_path&quot;: &quot;npm&quot;,
-    &quot;vue.rearranger.settings.migration&quot;: &quot;true&quot;
+  <component name="PropertiesComponent"><![CDATA[{
+  "keyToString": {
+    "Python.LogicFunction.executor": "Run",
+    "Python.RunHeun.executor": "Run",
+    "Python.RunODE.executor": "Run",
+    "Python.SimpleNN.executor": "Run",
+    "Python.TrainFunction.executor": "Run",
+    "Python.main.executor": "Run",
+    "RunOnceActivity.ShowReadmeOnStart": "true",
+    "RunOnceActivity.git.unshallow": "true",
+    "git-widget-placeholder": "master",
+    "node.js.detected.package.eslint": "true",
+    "node.js.detected.package.tslint": "true",
+    "node.js.selected.package.eslint": "(autodetect)",
+    "node.js.selected.package.tslint": "(autodetect)",
+    "nodejs_package_manager_path": "npm",
+    "vue.rearranger.settings.migration": "true"
   }
-}</component>
+}]]></component>
   <component name="RunManager">
     <configuration name="main" type="PythonConfigurationType" factoryName="Python" nameIsGenerated="true">
       <module name="NNExamples" />
@@ -184,7 +184,15 @@
       <option name="project" value="LOCAL" />
       <updated>1757040776695</updated>
     </task>
-    <option name="localTasksCounter" value="10" />
+    <task id="LOCAL-00010" summary="Training DeepNonlinear">
+      <option name="closed" value="true" />
+      <created>1757469942720</created>
+      <option name="number" value="00010" />
+      <option name="presentableId" value="LOCAL-00010" />
+      <option name="project" value="LOCAL" />
+      <updated>1757469942720</updated>
+    </task>
+    <option name="localTasksCounter" value="11" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -197,11 +205,13 @@
     <MESSAGE value="Add TrainLorenz" />
     <MESSAGE value="Train Lorenz Complete" />
     <MESSAGE value="Training Linear Euler" />
-    <option name="LAST_COMMIT_MESSAGE" value="Training Linear Euler" />
+    <MESSAGE value="Training DeepNonlinear" />
+    <option name="LAST_COMMIT_MESSAGE" value="Training DeepNonlinear" />
   </component>
   <component name="com.intellij.coverage.CoverageDataManagerImpl">
     <SUITE FILE_PATH="coverage/NNExamples$SimpleNN.coverage" NAME="SimpleNN Coverage Results" MODIFIED="1756868007707" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="false" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$" />
     <SUITE FILE_PATH="coverage/NNExamples$main.coverage" NAME="main Coverage Results" MODIFIED="1757466247057" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="false" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$" />
+    <SUITE FILE_PATH="coverage/NNExamples$RunHeun.coverage" NAME="RunHeun Coverage Results" MODIFIED="1757476136925" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="false" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$" />
     <SUITE FILE_PATH="coverage/NNExamples$TrainFunction.coverage" NAME="TrainFunction Coverage Results" MODIFIED="1756894011617" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="false" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$" />
     <SUITE FILE_PATH="coverage/NNExamples$RunODE.coverage" NAME="RunODE Coverage Results" MODIFIED="1757469885463" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="false" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$" />
     <SUITE FILE_PATH="coverage/NNExamples$LogicFunction.coverage" NAME="LogicFunction Coverage Results" MODIFIED="1756882757419" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="false" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$" />
