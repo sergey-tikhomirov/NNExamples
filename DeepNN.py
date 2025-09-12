@@ -28,11 +28,45 @@ class DeepNN(nn.Module):
         x = self.output(x)
         return x
 
+    def loss_fn(self, output, target):
+        term1 = ((target - output) ** 2).sum(dim=-1)
+        return term1.mean()
+
     def TrainingStep(self, x, y):
         # Uses global optimizer and loss_fn, same as your SimpleNN.
         optimizer.zero_grad()
         y_pred = self(x)
-        loss = loss_fn(y_pred, y)
+        loss = self.loss_fn(y_pred, y)
         loss.backward()
         optimizer.step()
         # (No return to keep interface identical to your SimpleNN)
+
+    def loss_fn_conservative(self, output, target, xin, al):
+        term1 = ((target - output) ** 2).sum(dim=-1)
+        norm_x_sq = (xin ** 2).sum(dim=-1)                       # (B,) or scalar
+        norm_x_plus_ypred_sq = ((xin + output) ** 2).sum(dim=-1) # (B,) or scalar
+        term2 = (norm_x_sq - norm_x_plus_ypred_sq) ** 2        # (B,) or scalar
+        return (term1 + al*term2).mean()
+
+    def TrainingStepConservation(self, x, y, al = 0):
+        """
+        One optimization step for the loss:
+            L = ||y - y_pred||^2 + (||x||^2 - ||x + y_pred||^2)^2
+        Assumes `optimizer` is a global (like in your SimpleNN example).
+        """
+        self.train()
+        optimizer.zero_grad(set_to_none=True)
+        y_pred = self(x)
+        """
+        # Term 1: ||y - y_pred||^2 (sum over feature dim)
+        term1 = ((y - y_pred) ** 2).sum(dim=-1)  # shape: (B,) or scalar
+        # Term 2: (||x||^2 - ||x + y_pred||^2)^2
+        norm_x_sq = (x ** 2).sum(dim=-1)                       # (B,) or scalar
+        norm_x_plus_ypred_sq = ((x + y_pred) ** 2).sum(dim=-1) # (B,) or scalar
+        term2 = (norm_x_sq - norm_x_plus_ypred_sq) ** 2        # (B,) or scalar
+        # Reduce over batch (if present)
+        loss = (term1 + al * term2).mean()
+        """
+        loss = self.loss_fn_conservative(y_pred, y, x, al)
+        loss.backward()
+        optimizer.step()
