@@ -4,11 +4,12 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="6e7ca3ba-20a5-4e7a-ad54-36bd737157ee" name="Changes" comment="Training DeepNonlinear">
-      <change afterPath="$PROJECT_DIR$/HeunStepNN.py" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/RunHeun.py" afterDir="false" />
+    <list default="true" id="6e7ca3ba-20a5-4e7a-ad54-36bd737157ee" name="Changes" comment="Heun first implementation">
+      <change afterPath="$PROJECT_DIR$/Compare_Res_Next.py" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/ODE_PINN.py" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/RunODE_PINN.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/SimpleNN.py" beforeDir="false" afterPath="$PROJECT_DIR$/SimpleNN.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/DeepNN.py" beforeDir="false" afterPath="$PROJECT_DIR$/DeepNN.py" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -50,9 +51,11 @@
   </component>
   <component name="PropertiesComponent"><![CDATA[{
   "keyToString": {
+    "Python.Compare_Res_Next.executor": "Run",
     "Python.LogicFunction.executor": "Run",
     "Python.RunHeun.executor": "Run",
     "Python.RunODE.executor": "Run",
+    "Python.RunODE_PINN.executor": "Run",
     "Python.SimpleNN.executor": "Run",
     "Python.TrainFunction.executor": "Run",
     "Python.main.executor": "Run",
@@ -95,7 +98,8 @@
   <component name="SharedIndexes">
     <attachedChunks>
       <set>
-        <option value="bundled-python-sdk-1bde30d8e611-7b97d883f26b-com.jetbrains.pycharm.pro.sharedIndexes.bundled-PY-252.25557.130" />
+        <option value="bundled-js-predefined-d6986cc7102b-5c90d61e3bab-JavaScript-PY-242.24807.21" />
+        <option value="bundled-python-sdk-00717045f1d3-399fe30bd8c1-com.jetbrains.pycharm.pro.sharedIndexes.bundled-PY-242.24807.21" />
       </set>
     </attachedChunks>
   </component>
@@ -111,6 +115,7 @@
       <workItem from="1756882286646" duration="2857000" />
       <workItem from="1756885548015" duration="1523000" />
       <workItem from="1756887512736" duration="25963000" />
+      <workItem from="1757637554700" duration="9575000" />
     </task>
     <task id="LOCAL-00001" summary="Initial setup">
       <option name="closed" value="true" />
@@ -192,7 +197,15 @@
       <option name="project" value="LOCAL" />
       <updated>1757469942720</updated>
     </task>
-    <option name="localTasksCounter" value="11" />
+    <task id="LOCAL-00011" summary="Heun first implementation">
+      <option name="closed" value="true" />
+      <created>1757476217137</created>
+      <option name="number" value="00011" />
+      <option name="presentableId" value="LOCAL-00011" />
+      <option name="project" value="LOCAL" />
+      <updated>1757476217137</updated>
+    </task>
+    <option name="localTasksCounter" value="12" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -206,14 +219,17 @@
     <MESSAGE value="Train Lorenz Complete" />
     <MESSAGE value="Training Linear Euler" />
     <MESSAGE value="Training DeepNonlinear" />
-    <option name="LAST_COMMIT_MESSAGE" value="Training DeepNonlinear" />
+    <MESSAGE value="Heun first implementation" />
+    <option name="LAST_COMMIT_MESSAGE" value="Heun first implementation" />
   </component>
   <component name="com.intellij.coverage.CoverageDataManagerImpl">
     <SUITE FILE_PATH="coverage/NNExamples$SimpleNN.coverage" NAME="SimpleNN Coverage Results" MODIFIED="1756868007707" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="false" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$" />
     <SUITE FILE_PATH="coverage/NNExamples$main.coverage" NAME="main Coverage Results" MODIFIED="1757466247057" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="false" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$" />
     <SUITE FILE_PATH="coverage/NNExamples$RunHeun.coverage" NAME="RunHeun Coverage Results" MODIFIED="1757476136925" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="false" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$" />
+    <SUITE FILE_PATH="coverage/NNExamples$RunODE_PINN.coverage" NAME="RunODE_PINN Coverage Results" MODIFIED="1757648830978" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="false" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$" />
     <SUITE FILE_PATH="coverage/NNExamples$TrainFunction.coverage" NAME="TrainFunction Coverage Results" MODIFIED="1756894011617" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="false" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$" />
     <SUITE FILE_PATH="coverage/NNExamples$RunODE.coverage" NAME="RunODE Coverage Results" MODIFIED="1757469885463" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="false" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$" />
     <SUITE FILE_PATH="coverage/NNExamples$LogicFunction.coverage" NAME="LogicFunction Coverage Results" MODIFIED="1756882757419" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="false" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$" />
+    <SUITE FILE_PATH="coverage/NNExamples$Compare_Res_Next.coverage" NAME="Compare_Res_Next Coverage Results" MODIFIED="1757646055676" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="false" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$" />
   </component>
 </project>
