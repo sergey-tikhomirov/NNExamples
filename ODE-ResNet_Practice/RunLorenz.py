@@ -38,11 +38,13 @@ def RHS(xin):
 def RandomPoint(blockSize = 1):
     return vMin + (vMax - vMin) * torch.rand(blockSize, dim)
 
-def trainModel(modelnn, func, nBlocks, blockSize):
+def trainModel(modelnn, func, nBlocks, blockSize, nSteps = 1):
     for i in range(nBlocks):
         x = RandomPoint(blockSize)
-        y = func(x)
-        modelnn.TrainingStep(x, y)
+        for j in range(nSteps):
+            y = func(x)
+            modelnn.TrainingStep(x, y)
+            x += func(x)
 
 def EulerStep(xin):
     return delta * RHS(xin)
@@ -113,11 +115,13 @@ def trainAndRun(modelnn, isStep, func, nBlocks, blockSize, point, nSteps = 100, 
     trainModel(modelnn, func, nBlocks, blockSize)
     if isStep:
         print('From Step')
-        traj = TrajectoryFromStep(point, nSteps, func)
+        traj = TrajectoryFromStep(point, nSteps, modelnn.forward)
     else:
         print('From Next')
-        traj = TrajectoryFromNext(point, nSteps, func)
+        traj = TrajectoryFromNext(point, nSteps, modelnn.forward)
     plotPoints(traj, plotName)
+
+
 
 def DrawTrajectories(nSteps, nBlocks, blockSize):
     x1 = RandomPoint()
@@ -133,12 +137,35 @@ def DrawTrajectories(nSteps, nBlocks, blockSize):
     trajEulerN = TrajectoryFromStep(x2, nSteps, Euler100Step)
     plotPoints(trajEulerN, 'EulerN')
 
-    nnStep = DeepNN.DeepNN(in_features = dim, hidden_layer = 2, hidden_size=40, out_features=dim)
-    nnStep.activation = nn.ReLU()
-    DeepNN.optimizer = optim.Adam(nnStep.parameters(), lr=0.1)
-    nnStep.loss_fn = nn.MSELoss()
-    trainAndRun(nnStep, point=x3, isStep=True, func = Euler100Step, nBlocks = nBlocks, blockSize = blockSize, plotName='NN EulerN')
+    nnStep2_40 = DeepNN.DeepNN(in_features = dim, hidden_layer = 2, hidden_size=40, out_features=dim)
+    #nnStep2_40.activation = nn.ReLU()
+    nnStep2_40.activation = nn.Sigmoid()
+    DeepNN.optimizer = optim.Adam(nnStep2_40.parameters(), lr=0.1)
+    DeepNN.loss_fn = nn.MSELoss()
+    trainAndRun(nnStep2_40, point=x3, isStep=True, func = Euler100Step, nBlocks = nBlocks, blockSize = blockSize, plotName='NN EulerN 2-40')
+
+    #nnStep2_400 = DeepNN.DeepNN(in_features = dim, hidden_layer = 2, hidden_size=400, out_features=dim)
+    #nnStep2_400.activation = nn.ReLU()
+    #nnStep2_400.activation = nn.Sigmoid()
+    #DeepNN.optimizer = optim.Adam(nnStep2_400.parameters(), lr=0.1)
+    #DeepNN.loss_fn = nn.MSELoss()
+    #trainAndRun(nnStep2_400, point=x4, isStep=True, func = Euler100Step, nBlocks = nBlocks, blockSize = blockSize, plotName='NN EulerN 2-400')
+
+    #nnStep4_400 = DeepNN.DeepNN(in_features = dim, hidden_layer = 4, hidden_size=40, out_features=dim)
+    #nnStep4_400.activation = nn.ReLU()
+    #nnStep4_400.activation = nn.Sigmoid()
+    #DeepNN.optimizer = optim.Adam(nnStep4_400.parameters(), lr=0.1)
+    #DeepNN.loss_fn = nn.MSELoss()
+    #trainAndRun(nnStep4_400, point=x5, isStep=True, func = Euler100Step, nBlocks = nBlocks, blockSize = blockSize, plotName='NN EulerN 4-400')
+
+    #nnStep2_40_nSteps = DeepNN.DeepNN(in_features = dim, hidden_layer = 2, hidden_size=40, out_features=dim)
+    ##nnStep2_40_nSteps.activation = nn.ReLU()
+    #nnStep2_40_nSteps.activation = nn.Sigmoid()
+    #DeepNN.optimizer = optim.Adam(nnStep2_40_nSteps.parameters(), lr=0.1)
+    #DeepNN.loss_fn = nn.MSELoss()
+    #trainAndRun(nnStep2_40_nSteps, point=x6, isStep=True, func = Euler100Step, nBlocks = nBlocks, blockSize = blockSize, nSteps = 1000, plotName='NN EulerN 2-40-steps')
 
     plt.show()
 
-DrawTrajectories(nSteps = 500, nBlocks=10000, blockSize = 1000)
+DrawTrajectories(nSteps = 1000, nBlocks=1000, blockSize = 1000)
+#max allowed nBlocks=10000, blockSize = 10000, nSetp = 1
