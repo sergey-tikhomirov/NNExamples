@@ -38,8 +38,8 @@ def linearSystem(xin):
     return xin @ A.T + b
 
 def RHS(xin):
-    return dampedPendulum(xin)
-    #return linearSystem(xin)
+    #return dampedPendulum(xin)
+    return linearSystem(xin)
 
 #####################################
 
@@ -57,8 +57,6 @@ def trainModelConservative(modelnn, func, nBlocks, blockSize, al):
         x = RandomPoint(blockSize)
         y = func(x)
         modelnn.TrainingStepConservation(x, y, al)
-
-
 
 def EulerStep(xin):
     return delta * RHS(xin)
@@ -117,12 +115,13 @@ def DrawTrajectories3(nSteps, nBlocks, blockSize):
     trainModel(nnNext, NextEuler100, nBlocks, blockSize)
 
     nnHeunInternal = DeepNN.DeepNN(in_features = dim, hidden_layer = 2, hidden_size=40, out_features=dim)
+    nnHeunInternal = SimpleNN.SimpleNN(in_features = dim, hidden_size=40, out_features=dim)
     nnNNHeun = HeunStepNN.HeunStep(nnHeunInternal)
-    trainModel(nnNNHeun, NextEuler100, nBlocks, blockSize)
+    trainModel(nnNNHeun, Euler100Step, nBlocks, blockSize)
 
     nnConservation1 = DeepNN.DeepNN(in_features = dim, hidden_layer = 4, hidden_size=40, out_features=dim)
     DeepNN.optimizer = optim.Adam(nnConservation1.parameters(), lr=0.01)
-    trainModelConservative(nnConservation1, Euler100Step, nBlocks, blockSize, 0.1)
+    trainModelConservative(nnConservation1, Euler100Step, nBlocks, blockSize, 0.02)
 
     nnConservation10 = DeepNN.DeepNN(in_features = dim, hidden_layer = 4, hidden_size=40, out_features=dim)
     DeepNN.optimizer = optim.Adam(nnConservation10.parameters(), lr=0.01)
@@ -140,25 +139,25 @@ def DrawTrajectories3(nSteps, nBlocks, blockSize):
     trajEulerN = TrajectoryFromStep(x1, nSteps, Euler100Step)
     plotPoints(trajEulerN, 'EulerN')
 
-    trajNNStep = TrajectoryFromStep(x2, nSteps, nnStep.forward)
-    plotPoints(trajNNStep, 'NN-Step')
+    #trajNNStep = TrajectoryFromStep(x2, nSteps, nnStep.forward)
+    #plotPoints(trajNNStep, 'NN-Step')
 
-    trajNNNext = TrajectoryFromNext(x3, nSteps, nnNext.forward)
-    plotPoints(trajNNNext, 'NN-Next')
+    #trajNNNext = TrajectoryFromNext(x3, nSteps, nnNext.forward)
+    #plotPoints(trajNNNext, 'NN-Next')
 
-    #trajHeunStep = TrajectoryFromStep(x4, nSteps, nnStep.forward)
+    #trajHeunStep = TrajectoryFromStep(x4, nSteps, nnNNHeun.forward)
     #plotPoints(trajHeunStep, 'NN-Heun')
 
     #trajNNNext = TrajectoryFromStep(x5, nSteps, nnConservation1.forward)
     #plotPoints(trajNNNext, 'NN-Conservation1')
 
-    #trajNNNext = TrajectoryFromStep(x6, nSteps, nnConservation10.forward)
-    #plotPoints(trajNNNext, 'NN-Conservation10')
+    trajNNNext = TrajectoryFromStep(x6, nSteps, nnConservation10.forward)
+    plotPoints(trajNNNext, 'NN-Conservation10')
 
     plt.legend()
     plt.show()
 
 
-DrawTrajectories3(100, 1000, 10)
+DrawTrajectories3(100, 1000, 1000)
 
 
