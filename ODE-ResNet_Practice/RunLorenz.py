@@ -17,7 +17,7 @@ from mpl_toolkits.mplot3d import Axes3D
 from sympy.stats.sampling.sample_numpy import numpy
 
 dim = 3
-delta = 0.1
+delta = 0.01
 vMax = 50.0
 vMin = -50.0
 
@@ -70,6 +70,15 @@ def TrajectoryFromNext(xin, nSteps, func):
         res = torch.cat([res, xcurr], dim = 0)
     return res
 
+_ax = None
+
+def get_or_create_3d(fig, position=111, **kwargs):
+    global _ax
+    if _ax is None:
+        print('New Subplot')
+        _ax = fig.add_subplot(position, projection="3d", **kwargs)
+    return _ax
+
 def plotPoints(pts, lbl):
     pts = pts.detach().numpy()
     if dim == 2:
@@ -84,25 +93,29 @@ def plotPoints(pts, lbl):
         ax.set_ylim(2*vMin, 2*vMax)
     if dim == 3:
         fig = plt.figure()
-        ax = next((a for a in fig.axes if getattr(a, "name", "") == "3d"), None)
-        if ax is None:
-            ax = fig.add_subplot(111, projection="3d")  # create it if missing
-        ax.scatter(pts[:, 0], pts[:, 1], pts[:, 2], s=12)
+        #ax = next((a for a in fig.axes if getattr(a, "name", "") == "3d"), None)
+        #if ax is None:
+        #    print('New SubPlot')
+        #    ax = fig.add_subplot(111, projection="3d")  # create it if missing
+        ax = get_or_create_3d(fig)
+        ax.scatter(pts[:, 0], pts[:, 1], pts[:, 2], s=1, label = lbl)
         ax.set_xlabel("x")
         ax.set_ylabel("y")
         ax.set_zlabel("z")
-        ax.set_title(lbl)
-
+        ax.legend()
+        #ax.set_title(lbl)
         # make axes roughly equal scale
-        ax.set_xlim(vMin, vMax)
-        ax.set_ylim(vMin, vMax)
-        ax.set_zlim(vMin, vMax)
+        ax.set_xlim(1*vMin, 1*vMax)
+        ax.set_ylim(1*vMin, 1*vMax)
+        ax.set_zlim(1*vMin, 1*vMax)
 
 def trainAndRun(modelnn, isStep, func, nBlocks, blockSize, point, nSteps = 100, plotName = 'Plot'):
     trainModel(modelnn, func, nBlocks, blockSize)
     if isStep:
+        print('From Step')
         traj = TrajectoryFromStep(point, nSteps, func)
     else:
+        print('From Next')
         traj = TrajectoryFromNext(point, nSteps, func)
     plotPoints(traj, plotName)
 
@@ -114,14 +127,18 @@ def DrawTrajectories(nSteps, nBlocks, blockSize):
     x5 = x1.clone()
     x6 = x1.clone()
 
-    trajEulerN = TrajectoryFromStep(x1, nSteps, Euler100Step)
+    #trajEuler = TrajectoryFromStep(x1, nSteps, EulerStep)
+    #plotPoints(trajEuler, 'Euler')
+
+    trajEulerN = TrajectoryFromStep(x2, nSteps, Euler100Step)
     plotPoints(trajEulerN, 'EulerN')
 
-    nnStep = DeepNN.DeepNN(in_features = dim, hidden_layer = 4, hidden_size=40, out_features=dim)
-    DeepNN.optimizer = optim.Adam(nnStep.parameters(), lr=0.01)
-    DeepNN.loss_fn = nn.MSELoss()
-    trainAndRun(nnStep, point=x2, isStep=True, func = nnStep.forward, nBlocks = nBlocks, blockSize = blockSize, plotName='NN EulerN')
+    nnStep = DeepNN.DeepNN(in_features = dim, hidden_layer = 2, hidden_size=40, out_features=dim)
+    nnStep.activation = nn.ReLU()
+    DeepNN.optimizer = optim.Adam(nnStep.parameters(), lr=0.1)
+    nnStep.loss_fn = nn.MSELoss()
+    trainAndRun(nnStep, point=x3, isStep=True, func = Euler100Step, nBlocks = nBlocks, blockSize = blockSize, plotName='NN EulerN')
 
     plt.show()
 
-DrawTrajectories(nSteps = 100, nBlocks=1000, blockSize = 100)
+DrawTrajectories(nSteps = 500, nBlocks=10000, blockSize = 1000)

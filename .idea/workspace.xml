@@ -4,10 +4,11 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="6e7ca3ba-20a5-4e7a-ad54-36bd737157ee" name="Changes" comment="Compare Res and Next&#10;ODE-PINNs">
+    <list default="true" id="6e7ca3ba-20a5-4e7a-ad54-36bd737157ee" name="Changes" comment="Compare Res and Next&#10;Mild ConservationLaw">
+      <change beforePath="$PROJECT_DIR$/.idea/NNExamples.iml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/NNExamples.iml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Compare_Res_Next.py" beforeDir="false" afterPath="$PROJECT_DIR$/Compare_Res_Next.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/DeepNN.py" beforeDir="false" afterPath="$PROJECT_DIR$/DeepNN.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/RunLorenz.py" beforeDir="false" afterPath="$PROJECT_DIR$/ODE-ResNet_Practice/RunLorenz.py" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -47,28 +48,29 @@
     <option name="hideEmptyMiddlePackages" value="true" />
     <option name="showLibraryContents" value="true" />
   </component>
-  <component name="PropertiesComponent"><![CDATA[{
-  "keyToString": {
-    "Python.Compare_Res_Next.executor": "Run",
-    "Python.DeepNN.executor": "Run",
-    "Python.LogicFunction.executor": "Run",
-    "Python.RunHeun.executor": "Run",
-    "Python.RunODE.executor": "Run",
-    "Python.RunODE_PINN.executor": "Run",
-    "Python.SimpleNN.executor": "Run",
-    "Python.TrainFunction.executor": "Run",
-    "Python.main.executor": "Run",
-    "RunOnceActivity.ShowReadmeOnStart": "true",
-    "RunOnceActivity.git.unshallow": "true",
-    "git-widget-placeholder": "master",
-    "node.js.detected.package.eslint": "true",
-    "node.js.detected.package.tslint": "true",
-    "node.js.selected.package.eslint": "(autodetect)",
-    "node.js.selected.package.tslint": "(autodetect)",
-    "nodejs_package_manager_path": "npm",
-    "vue.rearranger.settings.migration": "true"
+  <component name="PropertiesComponent">{
+  &quot;keyToString&quot;: {
+    &quot;Python.Compare_Res_Next.executor&quot;: &quot;Run&quot;,
+    &quot;Python.DeepNN.executor&quot;: &quot;Run&quot;,
+    &quot;Python.LogicFunction.executor&quot;: &quot;Run&quot;,
+    &quot;Python.RunHeun.executor&quot;: &quot;Run&quot;,
+    &quot;Python.RunLorenz.executor&quot;: &quot;Run&quot;,
+    &quot;Python.RunODE.executor&quot;: &quot;Run&quot;,
+    &quot;Python.RunODE_PINN.executor&quot;: &quot;Run&quot;,
+    &quot;Python.SimpleNN.executor&quot;: &quot;Run&quot;,
+    &quot;Python.TrainFunction.executor&quot;: &quot;Run&quot;,
+    &quot;Python.main.executor&quot;: &quot;Run&quot;,
+    &quot;RunOnceActivity.ShowReadmeOnStart&quot;: &quot;true&quot;,
+    &quot;RunOnceActivity.git.unshallow&quot;: &quot;true&quot;,
+    &quot;git-widget-placeholder&quot;: &quot;master&quot;,
+    &quot;node.js.detected.package.eslint&quot;: &quot;true&quot;,
+    &quot;node.js.detected.package.tslint&quot;: &quot;true&quot;,
+    &quot;node.js.selected.package.eslint&quot;: &quot;(autodetect)&quot;,
+    &quot;node.js.selected.package.tslint&quot;: &quot;(autodetect)&quot;,
+    &quot;nodejs_package_manager_path&quot;: &quot;npm&quot;,
+    &quot;vue.rearranger.settings.migration&quot;: &quot;true&quot;
   }
-}]]></component>
+}</component>
   <component name="RunManager">
     <configuration name="main" type="PythonConfigurationType" factoryName="Python" nameIsGenerated="true">
       <module name="NNExamples" />
@@ -114,7 +116,9 @@
       <workItem from="1756882286646" duration="2857000" />
       <workItem from="1756885548015" duration="1523000" />
       <workItem from="1756887512736" duration="25963000" />
-      <workItem from="1757637554700" duration="16401000" />
+      <workItem from="1757637554700" duration="17243000" />
+      <workItem from="1758678655603" duration="742000" />
+      <workItem from="1758680276582" duration="3566000" />
     </task>
     <task id="LOCAL-00001" summary="Initial setup">
       <option name="closed" value="true" />
@@ -212,7 +216,15 @@
       <option name="project" value="LOCAL" />
       <updated>1757648917483</updated>
     </task>
-    <option name="localTasksCounter" value="13" />
+    <task id="LOCAL-00013" summary="Compare Res and Next&#10;Mild ConservationLaw">
+      <option name="closed" value="true" />
+      <created>1757686868817</created>
+      <option name="number" value="00013" />
+      <option name="presentableId" value="LOCAL-00013" />
+      <option name="project" value="LOCAL" />
+      <updated>1757686868817</updated>
+    </task>
+    <option name="localTasksCounter" value="14" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -228,17 +240,19 @@
     <MESSAGE value="Training DeepNonlinear" />
     <MESSAGE value="Heun first implementation" />
     <MESSAGE value="Compare Res and Next&#10;ODE-PINNs" />
-    <option name="LAST_COMMIT_MESSAGE" value="Compare Res and Next&#10;ODE-PINNs" />
+    <MESSAGE value="Compare Res and Next&#10;Mild ConservationLaw" />
+    <option name="LAST_COMMIT_MESSAGE" value="Compare Res and Next&#10;Mild ConservationLaw" />
   </component>
   <component name="com.intellij.coverage.CoverageDataManagerImpl">
     <SUITE FILE_PATH="coverage/NNExamples$SimpleNN.coverage" NAME="SimpleNN Coverage Results" MODIFIED="1756868007707" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="false" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$" />
     <SUITE FILE_PATH="coverage/NNExamples$main.coverage" NAME="main Coverage Results" MODIFIED="1757466247057" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="false" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$" />
     <SUITE FILE_PATH="coverage/NNExamples$RunHeun.coverage" NAME="RunHeun Coverage Results" MODIFIED="1757476136925" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="false" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$" />
-    <SUITE FILE_PATH="coverage/NNExamples$RunODE_PINN.coverage" NAME="RunODE_PINN Coverage Results" MODIFIED="1757648830978" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="false" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$" />
+    <SUITE FILE_PATH="coverage/NNExamples$RunODE_PINN.coverage" NAME="RunODE_PINN Coverage Results" MODIFIED="1758682429419" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="false" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$" />
     <SUITE FILE_PATH="coverage/NNExamples$DeepNN.coverage" NAME="DeepNN Coverage Results" MODIFIED="1757684649219" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="false" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$" />
     <SUITE FILE_PATH="coverage/NNExamples$TrainFunction.coverage" NAME="TrainFunction Coverage Results" MODIFIED="1756894011617" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="false" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$" />
     <SUITE FILE_PATH="coverage/NNExamples$RunODE.coverage" NAME="RunODE Coverage Results" MODIFIED="1757469885463" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="false" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$" />
     <SUITE FILE_PATH="coverage/NNExamples$LogicFunction.coverage" NAME="LogicFunction Coverage Results" MODIFIED="1756882757419" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="false" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$" />
     <SUITE FILE_PATH="coverage/NNExamples$Compare_Res_Next.coverage" NAME="Compare_Res_Next Coverage Results" MODIFIED="1757686823263" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="false" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$" />
+    <SUITE FILE_PATH="coverage/NNExamples$RunLorenz.coverage" NAME="RunLorenz Coverage Results" MODIFIED="1758684110430" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="false" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/ODE-ResNet_Practice" />
   </component>
 </project>
