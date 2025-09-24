@@ -1,0 +1,400 @@
+% !TEX program = pdflatex
+\documentclass[aspectratio=169]{beamer}
+
+% -----------------------------
+% Packages & setup
+% -----------------------------
+\usepackage[T1]{fontenc}
+\usepackage[utf8]{inputenc}
+\usepackage{amsmath,amssymb,mathtools}
+\usepackage{bm}
+\usepackage{physics}
+\usepackage{graphicx}
+\usepackage{xcolor}
+\usepackage{hyperref}
+\usepackage{booktabs}
+\usepackage{tikz}
+\usepackage{listings}
+
+% Colors & listing style
+\definecolor{codebg}{HTML}{F7F7F7}
+\definecolor{codeframe}{HTML}{DDDDDD}
+\definecolor{pykeyword}{HTML}{7F0055}
+\definecolor{pystring}{HTML}{2A7B20}
+\definecolor{pycomment}{HTML}{7A7A7A}
+\definecolor{pybuiltin}{HTML}{0055AA}
+
+\lstdefinestyle{py}{
+  language=Python,
+  basicstyle=\linespread{0.98}\ttfamily\small,
+  keywordstyle=\color{pykeyword}\bfseries,
+  stringstyle=\color{pystring},
+  commentstyle=\color{pycomment}\itshape,
+  showstringspaces=false,
+  tabsize=2,
+  frame=single,
+  rulecolor=\color{codeframe},
+  backgroundcolor=\color{codebg},
+  numbers=left,
+  numberstyle=\tiny\color{pycomment},
+  numbersep=6pt,
+  xleftmargin=10pt,
+  framexleftmargin=8pt,
+  frameround=tttt,
+  breaklines=true,
+  keepspaces=true
+}
+
+% Beamer theme
+\usetheme{Madrid}
+\usecolortheme{seahorse}
+\setbeamertemplate{navigation symbols}{}
+\setbeamertemplate{footline}[frame number]
+\setbeamertemplate{caption}[numbered]
+
+% Title
+\title{Learning One-Step Maps with ResNets\\\small FitzHugh–Nagumo (Example 4.8)}
+\author{Alex Gomez}
+\date{\today}
+
+% Optional: speaker notes
+% \setbeameroption{show notes}
+
+\begin{document}
+
+% ----------------------------------
+% Title
+% ----------------------------------
+\begin{frame}
+  \titlepage
+  \vspace{-1ex}
+  \begin{itemize}
+    \item Goal: train a neural network to approximate a \emph{numerical one-step integrator} \(\Phi_{\Delta t}(x)\).
+    \item We skip equilibrium / Hartman--Grobman; focus on data\,$\to$\,ResNet\,$\to$\,rollouts.
+  \end{itemize}
+  % \note{We learn the discrete flow map, not the RHS directly.}
+\end{frame}
+
+% ----------------------------------
+% Problem setup: RHS
+% ----------------------------------
+\begin{frame}[fragile]{ODE setup: FitzHugh--Nagumo RHS}
+\begin{columns}[T,totalwidth=\textwidth]
+\begin{column}{0.55\textwidth}
+\begin{lstlisting}[style=py,caption={Vector field definition},label={lst:rhs}]
+def fhn_rhs(x, k=0.5):
+    x1, x2 = x[...,0], x[...,1]
+    dx1 = 3.0 * (x1 + x2 - (x1**3)/3.0 - k)
+    dx2 = - (x1 + 0.8*x2 - 0.7) / 3.0
+    return torch.stack([dx1, dx2], dim=-1)
+\end{lstlisting}
+\end{column}
+\begin{column}{0.45\textwidth}
+\textbf{Notes}
+\begin{itemize}
+  \item State \(x=(x_1,x_2)\) \(\in\mathbb{R}^2\).
+  \item \texttt{fhn\_rhs} returns \(f(x)\equiv\dot x\) used by numerical steppers.
+  \item This is the \emph{ground truth} dynamics; the NN never sees $f$ explicitly.
+\end{itemize}
+\end{column}
+\end{columns}
+\end{frame}
+
+% ----------------------------------
+% Numerical steppers
+% ----------------------------------
+\begin{frame}[fragile]{Reference one-step integrators (targets)}
+\begin{lstlisting}[style=py,caption={Euler / Heun(RK2) / RK4 steppers},label={lst:steppers}]
+def euler_step(x, dt, rhs):
+    return x + dt * rhs(x)
+
+def rk2_step(x, dt, rhs):  # Heun / explicit trapezoid
+    k1 = rhs(x)
+    k2 = rhs(x + dt * k1)
+    return x + 0.5 * dt * (k1 + k2)
+
+def rk4_step(x, dt, rhs):
+    k1 = rhs(x)
+    k2 = rhs(x + 0.5*dt*k1)
+    k3 = rhs(x + 0.5*dt*k2)
+    k4 = rhs(x + dt*k3)
+    return x + (dt/6.0) * (k1 + 2*k2 + 2*k3 + k4)
+\end{lstlisting}
+\vspace{-1ex}
+\begin{itemize}
+  \item These define $\Phi_{\Delta t}^{\text{Euler}}$, $\Phi_{\Delta t}^{\text{RK2}}$, $\Phi_{\Delta t}^{\text{RK4}}$.
+  \item We will \textbf{train one NN per stepper} to mimic each map.
+\end{itemize}
+\end{frame}
+
+% ----------------------------------
+% Data generation: (x0, x1)
+% ----------------------------------
+\begin{frame}[fragile]{Turning ODE into supervised learning: data $(x_0,x_1)$}
+\begin{columns}[T,totalwidth=\textwidth]
+\begin{column}{0.58\textwidth}
+\begin{lstlisting}[style=py,caption={Sampling and pairing},label={lst:datagen}]
+def sample_initials(n, lo=-5.0, hi=5.0, device="cpu"):
+    arr = np.random.uniform(lo, hi, size=(n,2)).astype(np.float32)
+    return torch.tensor(arr, device=device)
+
+def make_pairs(n_pairs, stepper="rk4", dt=0.05, device="cpu"):
+    x0 = sample_initials(n_pairs, device=device)
+    rhs = lambda z: fhn_rhs(z)
+    x1 = STEP_METHODS[stepper](x0, dt, rhs)
+    return x0, x1
+\end{lstlisting}
+\end{column}
+\begin{column}{0.42\textwidth}
+\textbf{Notes}
+\begin{itemize}
+  \item Draw $x_0\sim\mathcal U([-5,5]^2)$.
+  \item Build target $x_1=\Phi_{\Delta t}^{\text{stepper}}(x_0)$.
+  \item Supervised dataset: inputs $x_0$, labels $x_1$.
+\end{itemize}
+\end{column}
+\end{columns}
+\end{frame}
+
+% ----------------------------------
+% Model: Increment MLP + skip
+% ----------------------------------
+\begin{frame}[fragile]{Model: ResNet-style one-step learner}
+\begin{columns}[T,totalwidth=\textwidth]
+\begin{column}{0.56\textwidth}
+\begin{lstlisting}[style=py,caption={Increment MLP + skip connection},label={lst:model}]
+class IncrementMLP(nn.Module):
+    def __init__(self, dim=2, hidden=64, depth=2, activation=nn.ReLU):
+        super().__init__()
+        layers, in_dim = [], dim
+        for _ in range(depth):
+            layers += [nn.Linear(in_dim, hidden), activation()]
+            in_dim = hidden
+        layers += [nn.Linear(in_dim, dim)]  # output increment
+        self.net = nn.Sequential(*layers)
+    def forward(self, x):
+        return self.net(x)
+
+class OneStepResNet(nn.Module):
+    def __init__(self, inc_net: nn.Module):
+        super().__init__(); self.f = inc_net
+    def forward(self, x):
+        return x + self.f(x)  # identity + increment
+\end{lstlisting}
+\end{column}
+\begin{column}{0.44\textwidth}
+\textbf{Why this works}
+\begin{itemize}
+  \item Structure matches $x \mapsto x + \Delta(x)$ (e.g. Euler form).
+  \item Skip stabilizes training; learns residual \(\Delta\) rather than full map.
+  \item Small networks (depth=2, hidden=64) suffice for 2D tasks.
+\end{itemize}
+\end{column}
+\end{columns}
+\end{frame}
+
+% ----------------------------------
+% Training
+% ----------------------------------
+\begin{frame}[fragile]{Training loop: one-step regression}
+\begin{columns}[T,totalwidth=\textwidth]
+\begin{column}{0.62\textwidth}
+\begin{lstlisting}[style=py,caption={Mini-batch MSE with Adam},label={lst:train}]
+def train(model, x0, x1, *, epochs=3000, lr=1e-3, batch=256):
+    device = next(model.parameters()).device
+    x0, x1 = x0.to(device), x1.to(device)
+    opt = torch.optim.Adam(model.parameters(), lr=lr)
+    loss_fn = nn.MSELoss(); n = x0.shape[0]
+    for ep in range(1, epochs+1):
+        idx = torch.randint(0, n, (batch,), device=device)
+        xb, yb = x0[idx], x1[idx]
+        yhat = model(xb)
+        loss = loss_fn(yhat, yb)
+        opt.zero_grad(); loss.backward(); opt.step()
+\end{lstlisting}
+\end{column}
+\begin{column}{0.38\textwidth}
+\textbf{Notes}
+\begin{itemize}
+  \item Optimize $\min\,\mathbb E\,\|\hat x_1-x_1\|^2$.
+  \item One model per stepper (Euler/RK2/RK4).
+  \item Deterministic seeds recommended for reproducibility.
+\end{itemize}
+\end{column}
+\end{columns}
+\end{frame}
+
+% ----------------------------------
+% Evaluation
+% ----------------------------------
+\begin{frame}[fragile]{Evaluation: one-step metrics}
+\begin{columns}[T,totalwidth=\textwidth]
+\begin{column}{0.54\textwidth}
+\begin{lstlisting}[style=py,caption={MSE & L-infinity errors},label={lst:eval}]
+@torch.no_grad()
+def evaluate(model, x0_test, x1_test):
+    loss_fn = nn.MSELoss()
+    device = next(model.parameters()).device
+    x0_test, x1_test = x0_test.to(device), x1_test.to(device)
+    mse = loss_fn(model(x0_test), x1_test).item()
+    linf = (model(x0_test) - x1_test).abs().max().item()
+    return {"mse": mse, "linf": linf}
+\end{lstlisting}
+\end{column}
+\begin{column}{0.46\textwidth}
+\textbf{Why both?}
+\begin{itemize}
+  \item MSE: average distortion of one-step map.
+  \item $\ell_\infty$: worst-case deviation (useful for safety margins).
+  \item But: \textbf{single-step good} $\centernot\Rightarrow$ \textbf{long rollout good}.
+\end{itemize}
+\end{column}
+\end{columns}
+\end{frame}
+
+% ----------------------------------
+% Rollout
+% ----------------------------------
+\begin{frame}[fragile]{Rollout: composing learned map}
+\begin{columns}[T,totalwidth=\textwidth]
+\begin{column}{0.56\textwidth}
+\begin{lstlisting}[style=py,caption={Repeated application},label={lst:rollout}]
+@torch.no_grad()
+def rollout(model, x0, n_steps):
+    dev = next(model.parameters()).device
+    x = x0.to(dev).clone(); xs = [x.clone()]
+    for _ in range(n_steps):
+        x = model(x)
+        xs.append(x.clone())
+    return torch.stack(xs, dim=0)  # (n_steps+1, 2)
+\end{lstlisting}
+\end{column}
+\begin{column}{0.44\textwidth}
+\textbf{Use}
+\begin{itemize}
+  \item Compare NN rollout vs reference (e.g., RK4) from same $x_0$.
+  \item Visualize trajectories in phase plane; check drift/instability.
+  \item Consider adding a separate rollout error metric.
+\end{itemize}
+\end{column}
+\end{columns}
+\end{frame}
+
+% ----------------------------------
+% Visualization slide (conceptual)
+% ----------------------------------
+\begin{frame}{Visualization: phase plane overlays}
+\begin{itemize}
+  \item Plot vector field (quiver) once; overlay reference vs NN trajectories.
+  \item Use solid lines for reference; dashed for NN (same color per stepper).
+  \item Change $T$ and $x_0$ to stress-test stability under long rollouts.
+\end{itemize}
+\vspace{1ex}
+\begin{block}{Takeaway}
+A good one-step fit does not guarantee stability under composition. Always inspect rollouts.
+\end{block}
+\end{frame}
+
+% ----------------------------------
+% Practical upgrades (NN-focused)
+% ----------------------------------
+\begin{frame}[fragile]{Practical upgrades (NN-focused)}
+\begin{columns}[T,totalwidth=\textwidth]
+\begin{column}{0.52\textwidth}
+\textbf{Normalization + regularization}
+\begin{itemize}
+  \item Normalize inputs/targets (zero-mean, unit-var).
+  \item Weight decay (e.g., $10^{-6}$); gradient clipping.
+  \item Curriculum on domain: start in $[-2,2]^2$, widen.
+\end{itemize}
+\vspace{0.6ex}
+\textbf{Condition on $\Delta t$}
+\begin{itemize}
+  \item Concatenate $\Delta t$ to $x$ to generalize across step sizes.
+\end{itemize}
+\end{column}
+\begin{column}{0.48\textwidth}
+\textbf{Learn $f_\theta(x)$ (vector field)}
+\begin{itemize}
+  \item Train NN on $(x_0,\,(x_1-x_0)/\Delta t)$ to approximate RHS.
+  \item At inference: integrate $f_\theta$ with Euler/RK2/RK4, any $\Delta t$.
+  \item Often better extrapolation than direct one-step map learning.
+\end{itemize}
+\end{column}
+\end{columns}
+\end{frame}
+
+% ----------------------------------
+% Main script structure
+% ----------------------------------
+\begin{frame}[fragile]{Putting it together: main script}
+\begin{lstlisting}[style=py,caption={Train per stepper and plot},label={lst:main}]
+if __name__ == "__main__":
+    device = "cuda" if torch.cuda.is_available() else "cpu"
+    torch.manual_seed(0); np.random.seed(0); random.seed(0)
+
+    n_train = 2000; n_test = 2000
+    inc_net = lambda: IncrementMLP(dim=2, hidden=64, depth=2)
+    resnets, metrics = {}, {}
+
+    for stepper in ["euler", "rk2", "rk4"]:
+        x0_tr, x1_tr = make_pairs(n_train, stepper=stepper, device=device)
+        x0_te, x1_te = make_pairs(n_test,  stepper=stepper, device=device)
+        model = OneStepResNet(inc_net()).to(device)
+        train(model, x0_tr, x1_tr, epochs=5000, lr=1e-3, batch=256)
+        resnets[stepper] = model
+        metrics[stepper] = evaluate(model, x0_te, x1_te)
+
+    # Example rollout & plotting (phase portrait overlay)
+    # plot_all_phase_portraits(resnets, x0=(0.8, -0.1), T=20.0)
+\end{lstlisting}
+\end{frame}
+
+% ----------------------------------
+% Takeaways
+% ----------------------------------
+\begin{frame}{Takeaways}
+\begin{itemize}
+  \item ResNets are a natural fit for learning \emph{discrete} flow maps.
+  \item Supervised pairs $(x_0, x_1)$ from classical steppers provide labels.
+  \item Validate both one-step error and multi-step rollouts for stability.
+  \item Extensions: $\Delta t$-conditioning or learning the vector field $f_\theta$.
+\end{itemize}
+\end{frame}
+
+% ----------------------------------
+% Backup: dt-conditioning code snippet
+% ----------------------------------
+\begin{frame}[fragile]{(Backup) $\Delta t$-conditioning snippet}
+\begin{lstlisting}[style=py]
+def make_pairs(n_pairs, stepper="rk4", dt=0.05, device="cpu"):
+    x0 = sample_initials(n_pairs, device=device)
+    rhs = lambda z: fhn_rhs(z)
+    x1 = STEP_METHODS[stepper](x0, dt, rhs)
+    dt_col = torch.full((n_pairs,1), float(dt), device=device)
+    return torch.cat([x0, dt_col], dim=1), x1  # input is (x, dt)
+
+class IncrementMLP(nn.Module):
+    def __init__(self, in_dim=3, out_dim=2, hidden=128, depth=4):
+        ...
+\end{lstlisting}
+\end{frame}
+
+% ----------------------------------
+% Backup: vector-field learner snippet
+% ----------------------------------
+\begin{frame}[fragile]{(Backup) Learn $f_\theta(x)$ and integrate}
+\begin{lstlisting}[style=py]
+# Train to predict RHS directly
+f_theta = FNN(dim=2, hidden=128, depth=4)
+
+# Targets: (x1 - x0)/dt from a high-order reference (e.g., RK4)
+inc_targets = (x1_tr - x0_tr) / CFG.dt
+loss = mse(f_theta(x0_tr), inc_targets)
+
+# Inference: use Euler/RK2/RK4 with f_theta instead of fhn_rhs
+# x_{n+1} = x_n + dt * f_theta(x_n)
+\end{lstlisting}
+\end{frame}
+
+\end{document}
