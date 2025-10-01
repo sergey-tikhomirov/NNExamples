@@ -6,9 +6,10 @@
   <component name="ChangeListManager">
     <list default="true" id="6e7ca3ba-20a5-4e7a-ad54-36bd737157ee" name="Changes" comment="Compare Res and Next&#10;Mild ConservationLaw">
       <change beforePath="$PROJECT_DIR$/.idea/NNExamples.iml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/NNExamples.iml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/misc.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/misc.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/DeepNN.py" beforeDir="false" afterPath="$PROJECT_DIR$/DeepNN.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/RunLorenz.py" beforeDir="false" afterPath="$PROJECT_DIR$/ODE-ResNet_Practice/RunLorenz.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/ODE-ResNet_Practice/ResNN.py" beforeDir="false" afterPath="$PROJECT_DIR$/ODE-ResNet_Practice/ResNN.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/ODE-ResNet_Practice/RunLorenz.py" beforeDir="false" afterPath="$PROJECT_DIR$/ODE-ResNet_Practice/RunLorenz.py" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -41,7 +42,7 @@
   &quot;associatedIndex&quot;: 7
 }</component>
   <component name="ProjectId" id="327db3gcnWnXWmVxeYJcMnVxOIU" />
-  <component name="ProjectLevelVcsManager" settingsEditedManually="true">
+  <component name="ProjectLevelVcsManager">
     <ConfirmationsSetting value="2" id="Add" />
   </component>
   <component name="ProjectViewState">
@@ -51,6 +52,7 @@
   <component name="PropertiesComponent">{
   &quot;keyToString&quot;: {
     &quot;Python.Compare_Res_Next.executor&quot;: &quot;Run&quot;,
+    &quot;Python.Cubic_power.executor&quot;: &quot;Run&quot;,
     &quot;Python.DeepNN.executor&quot;: &quot;Run&quot;,
     &quot;Python.LogicFunction.executor&quot;: &quot;Run&quot;,
     &quot;Python.RunHeun.executor&quot;: &quot;Run&quot;,
