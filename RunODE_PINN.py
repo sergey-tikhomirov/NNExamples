@@ -12,31 +12,61 @@ import ODE_PINN
 
 import matplotlib.pyplot as plt
 
-from RunODE import nHidden
+#from RunODE import nHidden
 
 delta = 0.1
+nSteps = 50
 dim = 2
-nHidden = 40
+nLayers = 6
+nHidden = 30
 
 def RHS(xin):
     return dampedPendulum(xin)
+    #return linearSystem(xin)
 
 
-modelNN = SimpleNN.SimpleNN(in_features = dim, hidden_size=nHidden, out_features=dim)
-modelODEPINN = ODE_PINN.SimpleODEPINN(modelNN, RHS)
+testNN = DeepNN.DeepNN(in_features = dim, hidden_layer = 6, hidden_size=30, out_features=dim)
+DeepNN.optimizer = optim.Adam(testNN.parameters(), lr=0.01)
+DeepNN.loss_fn = nn.MSELoss()
+
+modelNN = DeepNN.DeepNN(in_features = dim + 1, hidden_layer = nLayers, hidden_size=nHidden, out_features=dim)
+modelODEPINN = ODE_PINN.SimpleODEPINN(dim, modelNN, RHS, isStrong=True, icLambda = 1)
+
+modelNNStrong = DeepNN.DeepNN(in_features = dim + 1, hidden_layer = nLayers, hidden_size=nHidden, out_features=dim)
+modelODEPINNStrong = ODE_PINN.SimpleODEPINN(dim, modelNNStrong, RHS, True)
 
 vMin = -7
 vMax = 7
-tMax = 10
+tMax = nSteps*delta
 gamma = 0.4
 omega2 = 8.91
 
-
 def dampedPendulum(xin):
-    x1, x2 = xin.unbind(dim=-1)          # each is shape (...)
+    x1, x2 = xin.unbind(dim=-1)
     dx1 = x2
     dx2 = -gamma*x2 - omega2 * torch.sin(x1)
-    return torch.stack((dx1, dx2), dim=-1)  # shape (..., 3)
+    return torch.stack((dx1, dx2), dim=-1)
+
+#A = torch.tensor([[1.0, 1.0],
+#                  [1.0, -1.0]])
+#b = torch.tensor([-2, 1])
+#vMin = 0
+#vMax = 2
+
+#A = torch.tensor([[-2.0, 1.0],
+#                  [1.0, -2.0]])
+#b = torch.tensor([-2, 1])
+#vMin = -2
+#vMax = 1
+
+#A = torch.tensor([[0.0, -1.0],
+#                  [1.0, 0.0]])
+#b = torch.tensor([0, 0])
+#vMin = -2
+#vMax = 2
+
+def linearSystem(xin):
+    return xin @ A.T + b
 
 ##########################################
 
@@ -72,19 +102,44 @@ def TrainODEPINN(nBlocks, blockSize = 1):
     for i in range(nBlocks):
         x = RandomPoint(blockSize)
         t = RandomTime(blockSize)
-        modelODEPINN.TrainingStep(x, t)
+        #print(t)
+        modelODEPINN.Train(x, t)
+        #modelODEPINN.TrainingStep(x, t)
 
 
-def TrajectoryODEPINN(xin, nSteps):
-    res = xin
+def TrainODEPINNStrong(nBlocks, blockSize = 1):
+    for i in range(nBlocks):
+        x = RandomPoint(blockSize)
+        t = RandomTime(blockSize)
+        modelODEPINNStrong.Train(x, t)
+
+
+def TrainDeepNNEuler100(nBlocks, blockSize = 1):
+    for i in range(nBlocks):
+        x = RandomPoint(blockSize)
+        y = Euler100Step(x)
+        testNN.TrainingStep(x, y)
+
+
+def TrajectoryODEPINN(xin, nSteps, model):
+    #print(xin)
+    res = xin.clone()
     for i in range(nSteps):
-        xcurr = modelODEPINN(xin, i*delta)
+        xcurr = model.forward(xin, torch.tensor([[i*delta]]))
         res = torch.cat([res, xcurr], dim = 0)
-    return res
+    print(res)
+    return res.detach().numpy()
+
+def TestNNStep(xin):
+    return testNN(xin).detach()
+
+def TrajectoryDeepNNEuler100(xin, nSteps):
+    return Trajectory(xin, nSteps, TestNNStep)
 
 ##############################################################
 
 def plotPoints(pts, lbl):
+    #print(pts)
     if dim == 2:
         # 2D scatter
         plt.plot(pts[:, 0], pts[:, 1], label=lbl)
@@ -107,9 +162,22 @@ def DrawTrajectories():
 
     print(x1)
 
-    trajEuler = TrajectoryEuler100(x1, 100)
+    trajEuler = TrajectoryEuler100(x1, nSteps)
     plotPoints(trajEuler, 'EulerN')
 
-    TrainODEPINN(1000, 100)
-    trajHeunNNEuler = TrajectoryODEPINN(x2, 100)
-    plotPoints(trajHeunNNEuler, 'ODEPINN')
+    #TrainDeepNNEuler100(1000, 1000)
+    #trajDeepNN = TrajectoryDeepNNEuler100(x2, nSteps)
+    #plotPoints(trajDeepNN, 'ResDeepNN')
+
+    TrainODEPINN(10000, 1000)
+    trajODEPINN = TrajectoryODEPINN(x3, nSteps, modelODEPINN)
+    plotPoints(trajODEPINN, 'ODEPINN')
+
+    #TrainODEPINNStrong(10000, 1000)
+    #trajODEPINNStrong = TrajectoryODEPINN(x4, nSteps, modelODEPINNStrong)
+    #plotPoints(trajODEPINNStrong, 'ODEPINNStrong')
+
+    plt.legend()
+    plt.show()
+
+DrawTrajectories()
