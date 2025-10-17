@@ -38,7 +38,7 @@ def RHS(xin):
 def RandomPoint(blockSize = 1):
     return vMin + (vMax - vMin) * torch.rand(blockSize, dim)
 
-def trainModel(modelnn, func, nBlocks, blockSize, nSteps = 1):
+def trainModel(modelnn, func, nBlocks, blockSize, nSteps = 10):
     for i in range(nBlocks):
         x = RandomPoint(blockSize)
         for j in range(nSteps):

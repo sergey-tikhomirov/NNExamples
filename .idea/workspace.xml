@@ -4,12 +4,12 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="6e7ca3ba-20a5-4e7a-ad54-36bd737157ee" name="Changes" comment="Lorenz Steps">
-      <change afterPath="$PROJECT_DIR$/Book/Parabolic.py" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/ODE_PINN_Book.py" afterDir="false" />
+    <list default="true" id="6e7ca3ba-20a5-4e7a-ad54-36bd737157ee" name="Changes" comment="PINNs ODE">
+      <change afterPath="$PROJECT_DIR$/Book/DeepKolmogorov.py" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/Book/RandomWalk.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/ODE_PINN.py" beforeDir="false" afterPath="$PROJECT_DIR$/ODE_PINN.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/RunODE_PINN.py" beforeDir="false" afterPath="$PROJECT_DIR$/RunODE_PINN.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Book/Parabolic.py" beforeDir="false" afterPath="$PROJECT_DIR$/Book/Parabolic.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/ODE-ResNet_Practice/RunLorenz.py" beforeDir="false" afterPath="$PROJECT_DIR$/ODE-ResNet_Practice/RunLorenz.py" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -52,6 +52,7 @@
   <component name="PropertiesComponent"><![CDATA[{
   "keyToString": {
     "Python.Compare_Res_Next.executor": "Run",
+    "Python.DeepKolmogorov.executor": "Run",
     "Python.DeepNN.executor": "Run",
     "Python.LogicFunction.executor": "Run",
     "Python.ODE_PINN.executor": "Run",
@@ -128,7 +129,8 @@
       <workItem from="1757637554700" duration="17243000" />
       <workItem from="1758678655603" duration="742000" />
       <workItem from="1758680276582" duration="9586000" />
-      <workItem from="1759274314242" duration="15428000" />
+      <workItem from="1759274314242" duration="20635000" />
+      <workItem from="1760643323532" duration="12055000" />
     </task>
     <task id="LOCAL-00001" summary="Initial setup">
       <option name="closed" value="true" />
@@ -250,7 +252,15 @@
       <option name="project" value="LOCAL" />
       <updated>1758690191903</updated>
     </task>
-    <option name="localTasksCounter" value="16" />
+    <task id="LOCAL-00016" summary="PINNs ODE">
+      <option name="closed" value="true" />
+      <created>1759290798080</created>
+      <option name="number" value="00016" />
+      <option name="presentableId" value="LOCAL-00016" />
+      <option name="project" value="LOCAL" />
+      <updated>1759290798080</updated>
+    </task>
+    <option name="localTasksCounter" value="17" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -269,21 +279,23 @@
     <MESSAGE value="Compare Res and Next&#10;Mild ConservationLaw" />
     <MESSAGE value="Lorenz Development" />
     <MESSAGE value="Lorenz Steps" />
-    <option name="LAST_COMMIT_MESSAGE" value="Lorenz Steps" />
+    <MESSAGE value="PINNs ODE" />
+    <option name="LAST_COMMIT_MESSAGE" value="PINNs ODE" />
   </component>
   <component name="com.intellij.coverage.CoverageDataManagerImpl">
     <SUITE FILE_PATH="coverage/NNExamples$main.coverage" NAME="main Coverage Results" MODIFIED="1759275162170" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="false" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$" />
     <SUITE FILE_PATH="coverage/NNExamples$RunHeun.coverage" NAME="RunHeun Coverage Results" MODIFIED="1757476136925" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="false" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$" />
     <SUITE FILE_PATH="coverage/NNExamples$LogicFunction.coverage" NAME="LogicFunction Coverage Results" MODIFIED="1756882757419" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="false" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$" />
     <SUITE FILE_PATH="coverage/NNExamples$Compare_Res_Next.coverage" NAME="Compare_Res_Next Coverage Results" MODIFIED="1757686823263" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="false" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$" />
-    <SUITE FILE_PATH="coverage/NNExamples$RunLorenz.coverage" NAME="RunLorenz Coverage Results" MODIFIED="1758689782443" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="false" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/ODE-ResNet_Practice" />
+    <SUITE FILE_PATH="coverage/NNExamples$RunLorenz.coverage" NAME="RunLorenz Coverage Results" MODIFIED="1759326797938" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="false" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/ODE-ResNet_Practice" />
     <SUITE FILE_PATH="coverage/NNExamples$SimpleNN.coverage" NAME="SimpleNN Coverage Results" MODIFIED="1756868007707" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="false" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$" />
     <SUITE FILE_PATH="coverage/NNExamples$RunODE_PINN.coverage" NAME="RunODE_PINN Coverage Results" MODIFIED="1759287669650" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="false" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$" />
     <SUITE FILE_PATH="coverage/NNExamples$DeepNN.coverage" NAME="DeepNN Coverage Results" MODIFIED="1757684649219" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="false" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$" />
     <SUITE FILE_PATH="coverage/NNExamples$TrainFunction.coverage" NAME="TrainFunction Coverage Results" MODIFIED="1756894011617" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="false" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$" />
     <SUITE FILE_PATH="coverage/NNExamples$RunODE.coverage" NAME="RunODE Coverage Results" MODIFIED="1759279812224" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="false" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$" />
     <SUITE FILE_PATH="coverage/NNExamples$ODE_PINN.coverage" NAME="ODE_PINN Coverage Results" MODIFIED="1759287325058" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="false" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$" />
+    <SUITE FILE_PATH="coverage/NNExamples$DeepKolmogorov.coverage" NAME="DeepKolmogorov Coverage Results" MODIFIED="1760668302047" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="false" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/Book" />
     <SUITE FILE_PATH="coverage/NNExamples$ODE_PINN_Book.coverage" NAME="ODE_PINN_Book Coverage Results" MODIFIED="1759290423428" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="false" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$" />
-    <SUITE FILE_PATH="coverage/NNExamples$Parabolic.coverage" NAME="Parabolic Coverage Results" MODIFIED="1759288684233" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="false" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/Book" />
+    <SUITE FILE_PATH="coverage/NNExamples$Parabolic.coverage" NAME="Parabolic Coverage Results" MODIFIED="1760655905695" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="false" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/Book" />
   </component>
 </project>

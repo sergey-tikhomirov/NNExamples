@@ -16,7 +16,8 @@ t_data = torch.rand(M, 1).to(dev) * T
 
 # The initial value
 def phi(x):
-    return x. square ().sum ( axis =1, keepdims = True ). sin ()
+    #return x. square ().sum ( axis =1, keepdims = True ). sin ()
+    return x.cos().sum ( axis =1, keepdim = True )
 
 # We use a network with 4 hidden layers of 50 neurons each and the
 # Swish activation function ( called SiLU in PyTorch )
