@@ -33,7 +33,7 @@ optimizer = torch . optim . Adam (N. parameters () , lr =3e-4)
 
 J = 256 # the batch size
 
-for i in range (20000) :
+for i in range (500) :
 # Choose a random batch of training samples
     indices = torch . randint (0, M, (J ,))
     x = x_data [ indices , :]
