@@ -30,7 +30,7 @@ DeepNN.optimizer = optim.Adam(testNN.parameters(), lr=0.01)
 DeepNN.loss_fn = nn.MSELoss()
 
 modelNN = DeepNN.DeepNN(in_features = dim + 1, hidden_layer = nLayers, hidden_size=nHidden, out_features=dim)
-modelODEPINN = ODE_PINN.SimpleODEPINN(dim, modelNN, RHS, isStrong=True, icLambda = 1)
+modelODEPINN = ODE_PINN.SimpleODEPINN(dim, modelNN, RHS, isStrong=True, icLambda = 0.1)
 
 modelNNStrong = DeepNN.DeepNN(in_features = dim + 1, hidden_layer = nLayers, hidden_size=nHidden, out_features=dim)
 modelODEPINNStrong = ODE_PINN.SimpleODEPINN(dim, modelNNStrong, RHS, True)
@@ -38,7 +38,7 @@ modelODEPINNStrong = ODE_PINN.SimpleODEPINN(dim, modelNNStrong, RHS, True)
 vMin = -7
 vMax = 7
 tMax = nSteps*delta
-gamma = 0.4
+gamma = 0.6
 omega2 = 8.91
 
 def dampedPendulum(xin):
@@ -169,13 +169,13 @@ def DrawTrajectories():
     #trajDeepNN = TrajectoryDeepNNEuler100(x2, nSteps)
     #plotPoints(trajDeepNN, 'ResDeepNN')
 
-    TrainODEPINN(10000, 1000)
+    TrainODEPINN(1000, 1000)
     trajODEPINN = TrajectoryODEPINN(x3, nSteps, modelODEPINN)
     plotPoints(trajODEPINN, 'ODEPINN')
 
-    #TrainODEPINNStrong(10000, 1000)
-    #trajODEPINNStrong = TrajectoryODEPINN(x4, nSteps, modelODEPINNStrong)
-    #plotPoints(trajODEPINNStrong, 'ODEPINNStrong')
+    TrainODEPINNStrong(100000, 1000)
+    trajODEPINNStrong = TrajectoryODEPINN(x4, nSteps, modelODEPINNStrong)
+    plotPoints(trajODEPINNStrong, 'ODEPINNStrong')
 
     plt.legend()
     plt.show()

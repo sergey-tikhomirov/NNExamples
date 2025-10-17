@@ -4,12 +4,12 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="6e7ca3ba-20a5-4e7a-ad54-36bd737157ee" name="Changes" comment="Compare Res and Next&#10;Mild ConservationLaw">
-      <change beforePath="$PROJECT_DIR$/.idea/NNExamples.iml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/NNExamples.iml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/misc.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/misc.xml" afterDir="false" />
+    <list default="true" id="6e7ca3ba-20a5-4e7a-ad54-36bd737157ee" name="Changes" comment="24.09 class">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/ODE-ResNet_Practice/ResNN.py" beforeDir="false" afterPath="$PROJECT_DIR$/ODE-ResNet_Practice/ResNN.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Book/Parabolic.py" beforeDir="false" afterPath="$PROJECT_DIR$/Book/Parabolic.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/ODE-ResNet_Practice/RunLorenz.py" beforeDir="false" afterPath="$PROJECT_DIR$/ODE-ResNet_Practice/RunLorenz.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/ODE_PINN.py" beforeDir="false" afterPath="$PROJECT_DIR$/ODE_PINN.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/RunODE_PINN.py" beforeDir="false" afterPath="$PROJECT_DIR$/RunODE_PINN.py" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -35,7 +35,7 @@
   <component name="GithubPullRequestsUISettings">{
   &quot;selectedUrlAndAccountId&quot;: {
     &quot;url&quot;: &quot;https://github.com/sergey-tikhomirov/NNExamples&quot;,
-    &quot;accountId&quot;: &quot;7767fc8e-9c7d-4b77-871f-f4bb2b5f9ae5&quot;
+    &quot;accountId&quot;: &quot;99d313ff-a2c2-4f4d-a025-17c7c12d1855&quot;
   }
 }</component>
   <component name="ProjectColorInfo">{
@@ -55,6 +55,9 @@
     &quot;Python.Cubic_power.executor&quot;: &quot;Run&quot;,
     &quot;Python.DeepNN.executor&quot;: &quot;Run&quot;,
     &quot;Python.LogicFunction.executor&quot;: &quot;Run&quot;,
+    &quot;Python.ODE_PINN.executor&quot;: &quot;Run&quot;,
+    &quot;Python.ODE_PINN_Book.executor&quot;: &quot;Run&quot;,
+    &quot;Python.Parabolic.executor&quot;: &quot;Run&quot;,
     &quot;Python.RunHeun.executor&quot;: &quot;Run&quot;,
     &quot;Python.RunLorenz.executor&quot;: &quot;Run&quot;,
     &quot;Python.RunODE.executor&quot;: &quot;Run&quot;,
@@ -101,8 +104,7 @@
   <component name="SharedIndexes">
     <attachedChunks>
       <set>
-        <option value="bundled-js-predefined-d6986cc7102b-5c90d61e3bab-JavaScript-PY-242.24807.21" />
-        <option value="bundled-python-sdk-00717045f1d3-399fe30bd8c1-com.jetbrains.pycharm.pro.sharedIndexes.bundled-PY-242.24807.21" />
+        <option value="bundled-python-sdk-1bde30d8e611-7b97d883f26b-com.jetbrains.pycharm.pro.sharedIndexes.bundled-PY-252.25557.130" />
       </set>
     </attachedChunks>
   </component>
@@ -226,7 +228,15 @@
       <option name="project" value="LOCAL" />
       <updated>1757686868817</updated>
     </task>
-    <option name="localTasksCounter" value="14" />
+    <task id="LOCAL-00014" summary="24.09 class">
+      <option name="closed" value="true" />
+      <created>1759322610919</created>
+      <option name="number" value="00014" />
+      <option name="presentableId" value="LOCAL-00014" />
+      <option name="project" value="LOCAL" />
+      <updated>1759322610919</updated>
+    </task>
+    <option name="localTasksCounter" value="15" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -243,7 +253,8 @@
     <MESSAGE value="Heun first implementation" />
     <MESSAGE value="Compare Res and Next&#10;ODE-PINNs" />
     <MESSAGE value="Compare Res and Next&#10;Mild ConservationLaw" />
-    <option name="LAST_COMMIT_MESSAGE" value="Compare Res and Next&#10;Mild ConservationLaw" />
+    <MESSAGE value="24.09 class" />
+    <option name="LAST_COMMIT_MESSAGE" value="24.09 class" />
   </component>
   <component name="com.intellij.coverage.CoverageDataManagerImpl">
     <SUITE FILE_PATH="coverage/NNExamples$SimpleNN.coverage" NAME="SimpleNN Coverage Results" MODIFIED="1756868007707" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="false" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$" />
