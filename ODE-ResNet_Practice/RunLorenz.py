@@ -74,10 +74,11 @@ def TrajectoryFromNext(xin, nSteps, func):
 
 _ax = None
 
-def get_or_create_3d(fig, position=111, **kwargs):
+def get_or_create_3d(position=111, **kwargs):
     global _ax
     if _ax is None:
         print('New Subplot')
+        fig = plt.figure()
         _ax = fig.add_subplot(position, projection="3d", **kwargs)
     return _ax
 
@@ -94,12 +95,11 @@ def plotPoints(pts, lbl):
         ax.set_xlim(2*vMin, 2*vMax)
         ax.set_ylim(2*vMin, 2*vMax)
     if dim == 3:
-        fig = plt.figure()
         #ax = next((a for a in fig.axes if getattr(a, "name", "") == "3d"), None)
         #if ax is None:
         #    print('New SubPlot')
         #    ax = fig.add_subplot(111, projection="3d")  # create it if missing
-        ax = get_or_create_3d(fig)
+        ax = get_or_create_3d()
         ax.scatter(pts[:, 0], pts[:, 1], pts[:, 2], s=1, label = lbl)
         ax.set_xlabel("x")
         ax.set_ylabel("y")

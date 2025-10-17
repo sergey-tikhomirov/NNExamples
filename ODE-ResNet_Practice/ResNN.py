@@ -18,8 +18,8 @@ class ResNN(nn.Module):
         for _ in range(hidden_layer - 2):                      # now 1 + 4 = 5 hidden layers total
             self.hidden_layers.append(nn.Linear(hidden_size, hidden_size))
 
-        self.activation = nn.ReLU()
-        #self.activation = nn.Sigmoid()
+        #self.activation = nn.ReLU()
+        self.activation = nn.Sigmoid()
         self.output = nn.Linear(hidden_size, out_features)
         
         # SKIP CONNECTION
