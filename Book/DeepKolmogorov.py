@@ -5,7 +5,7 @@ import matplotlib.pyplot as plt
 dev = torch.device('cuda' if torch.cuda.is_available () else 'cpu')
 
 # Configure the training parameters and optimization algorithm
-steps = 3000
+steps = 30000
 batch_size = 256
 #batch_size = 3
 
@@ -99,8 +99,8 @@ def generate_brownian_motion (Num, x):
 
 
 # Train the network
-train_Normal()
-#train_RW()
+#train_Normal()
+train_RW()
 
 # Plot the result at M+1 timesteps
 M = 5

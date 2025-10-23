@@ -4,12 +4,10 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="6e7ca3ba-20a5-4e7a-ad54-36bd737157ee" name="Changes" comment="PINNs ODE">
-      <change afterPath="$PROJECT_DIR$/Book/DeepKolmogorov.py" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/Book/RandomWalk.py" afterDir="false" />
+    <list default="true" id="6e7ca3ba-20a5-4e7a-ad54-36bd737157ee" name="Changes" comment="19.10 class">
+      <change afterPath="$PROJECT_DIR$/ForExperiments.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Book/Parabolic.py" beforeDir="false" afterPath="$PROJECT_DIR$/Book/Parabolic.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/ODE-ResNet_Practice/RunLorenz.py" beforeDir="false" afterPath="$PROJECT_DIR$/ODE-ResNet_Practice/RunLorenz.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Book/DeepKolmogorov.py" beforeDir="false" afterPath="$PROJECT_DIR$/Book/DeepKolmogorov.py" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -35,47 +33,47 @@
   <component name="GithubPullRequestsUISettings">{
   &quot;selectedUrlAndAccountId&quot;: {
     &quot;url&quot;: &quot;https://github.com/sergey-tikhomirov/NNExamples&quot;,
-    &quot;accountId&quot;: &quot;7767fc8e-9c7d-4b77-871f-f4bb2b5f9ae5&quot;
+    &quot;accountId&quot;: &quot;99d313ff-a2c2-4f4d-a025-17c7c12d1855&quot;
   }
 }</component>
   <component name="ProjectColorInfo">{
   &quot;associatedIndex&quot;: 7
 }</component>
   <component name="ProjectId" id="327db3gcnWnXWmVxeYJcMnVxOIU" />
-  <component name="ProjectLevelVcsManager" settingsEditedManually="true">
+  <component name="ProjectLevelVcsManager">
     <ConfirmationsSetting value="2" id="Add" />
   </component>
   <component name="ProjectViewState">
     <option name="hideEmptyMiddlePackages" value="true" />
     <option name="showLibraryContents" value="true" />
   </component>
-  <component name="PropertiesComponent"><![CDATA[{
-  "keyToString": {
-    "Python.Compare_Res_Next.executor": "Run",
-    "Python.DeepKolmogorov.executor": "Run",
-    "Python.DeepNN.executor": "Run",
-    "Python.LogicFunction.executor": "Run",
-    "Python.ODE_PINN.executor": "Run",
-    "Python.ODE_PINN_Book.executor": "Run",
-    "Python.Parabolic.executor": "Run",
-    "Python.RunHeun.executor": "Run",
-    "Python.RunLorenz.executor": "Run",
-    "Python.RunODE.executor": "Run",
-    "Python.RunODE_PINN.executor": "Run",
-    "Python.SimpleNN.executor": "Run",
-    "Python.TrainFunction.executor": "Run",
-    "Python.main.executor": "Run",
-    "RunOnceActivity.ShowReadmeOnStart": "true",
-    "RunOnceActivity.git.unshallow": "true",
-    "git-widget-placeholder": "master",
-    "node.js.detected.package.eslint": "true",
-    "node.js.detected.package.tslint": "true",
-    "node.js.selected.package.eslint": "(autodetect)",
-    "node.js.selected.package.tslint": "(autodetect)",
-    "nodejs_package_manager_path": "npm",
-    "vue.rearranger.settings.migration": "true"
+  <component name="PropertiesComponent">{
+  &quot;keyToString&quot;: {
+    &quot;Python.Compare_Res_Next.executor&quot;: &quot;Run&quot;,
+    &quot;Python.DeepKolmogorov.executor&quot;: &quot;Run&quot;,
+    &quot;Python.DeepNN.executor&quot;: &quot;Run&quot;,
+    &quot;Python.LogicFunction.executor&quot;: &quot;Run&quot;,
+    &quot;Python.ODE_PINN.executor&quot;: &quot;Run&quot;,
+    &quot;Python.ODE_PINN_Book.executor&quot;: &quot;Run&quot;,
+    &quot;Python.Parabolic.executor&quot;: &quot;Run&quot;,
+    &quot;Python.RunHeun.executor&quot;: &quot;Run&quot;,
+    &quot;Python.RunLorenz.executor&quot;: &quot;Run&quot;,
+    &quot;Python.RunODE.executor&quot;: &quot;Run&quot;,
+    &quot;Python.RunODE_PINN.executor&quot;: &quot;Run&quot;,
+    &quot;Python.SimpleNN.executor&quot;: &quot;Run&quot;,
+    &quot;Python.TrainFunction.executor&quot;: &quot;Run&quot;,
+    &quot;Python.main.executor&quot;: &quot;Run&quot;,
+    &quot;RunOnceActivity.ShowReadmeOnStart&quot;: &quot;true&quot;,
+    &quot;RunOnceActivity.git.unshallow&quot;: &quot;true&quot;,
+    &quot;git-widget-placeholder&quot;: &quot;master&quot;,
+    &quot;node.js.detected.package.eslint&quot;: &quot;true&quot;,
+    &quot;node.js.detected.package.tslint&quot;: &quot;true&quot;,
+    &quot;node.js.selected.package.eslint&quot;: &quot;(autodetect)&quot;,
+    &quot;node.js.selected.package.tslint&quot;: &quot;(autodetect)&quot;,
+    &quot;nodejs_package_manager_path&quot;: &quot;npm&quot;,
+    &quot;vue.rearranger.settings.migration&quot;: &quot;true&quot;
   }
-}]]></component>
+}</component>
   <component name="RecentsManager">
     <key name="MoveFile.RECENT_KEYS">
       <recent name="C:\Teaching\2025-DE-ML\NNExamples\ODE-ResNet_Practice" />
@@ -109,8 +107,7 @@
   <component name="SharedIndexes">
     <attachedChunks>
       <set>
-        <option value="bundled-js-predefined-d6986cc7102b-5c90d61e3bab-JavaScript-PY-242.24807.21" />
-        <option value="bundled-python-sdk-00717045f1d3-399fe30bd8c1-com.jetbrains.pycharm.pro.sharedIndexes.bundled-PY-242.24807.21" />
+        <option value="bundled-python-sdk-1bde30d8e611-7b97d883f26b-com.jetbrains.pycharm.pro.sharedIndexes.bundled-PY-252.25557.130" />
       </set>
     </attachedChunks>
   </component>
