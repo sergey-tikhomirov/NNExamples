@@ -1,8 +1,8 @@
 import torch
-import matplotlib . pyplot as plt
-from torch . autograd import grad
-from matplotlib . gridspec import GridSpec
-from matplotlib .cm import ScalarMappable
+import matplotlib.pyplot as plt
+from torch.autograd import grad
+from matplotlib.gridspec import GridSpec
+from matplotlib.cm import ScalarMappable
 
 dev = torch . device (" cuda :0" if torch . cuda . is_available () else "cpu")
 
@@ -35,7 +35,7 @@ J = 256 # the batch size
 
 for i in range (500) :
 # Choose a random batch of training samples
-    indices = torch . randint (0, M, (J ,))
+    indices = torch.randint (0, M, (J ,))
     x = x_data [ indices , :]
     t = t_data [ indices , :]
 
