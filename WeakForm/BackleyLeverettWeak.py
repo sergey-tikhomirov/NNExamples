@@ -10,7 +10,7 @@ ht = 0.004
 GL = 2
 xMin = -1.0
 xMax = 1.0
-T = 2.0
+T = 0.50
 
 leftVal = 1.0
 rightVal = 0.0
@@ -47,6 +47,9 @@ def leggauss_2d(n, ax, bx, ay, by):
     # tensor-product grid and weights
     XX, YY = np.meshgrid(X, Y, indexing='ij')                 # shape (n, n)
     W = (0.25*(bx-ax)*(by-ay)) * np.outer(w1, w2)             # shape (n, n)
+    #print('XX:', XX)
+    #print('YY:', YY)
+    #print('W:', W)
     return XX, YY, W
 
 def weak_residual_loss_singleVal(NN, t, x, dt, dx):
@@ -55,7 +58,7 @@ def weak_residual_loss_singleVal(NN, t, x, dt, dx):
     s = NN(torch.hstack((evalt, evalx)))
     term1 = s*dphi_dt_ref(torch.full_like(x, dx), torch.full_like(t, dt))
     term2 = flux(s)*dphi_dx_ref(torch.full_like(x, dx), torch.full_like(t, dt))
-    return (-(term1 + term2)*16*hx*ht).square().mean()
+    return -(term1 + term2)*16*hx*ht
 
 def weak_residual_loss(NN, x, t):
     tt, xx, ww = leggauss_2d(GL, -1, 1, -1, 1)
@@ -67,27 +70,27 @@ def weak_residual_loss(NN, x, t):
         for ixx in range(GL):
             dt = tt[itt, ixx]
             dx = xx[itt, ixx]
-            res+= weak_residual_loss_singleVal(NN, t, x, dt, dx)
+            res += ww[itt, ixx]*weak_residual_loss_singleVal(NN, t, x, dt, dx)
 
-    return res
+    return res.square().mean()
 
 
 NWeak = torch .nn. Sequential (
-    torch .nn. Linear (2, 50) , torch .nn. SiLU () ,
-    torch .nn. Linear (50 , 50) , torch .nn. SiLU () ,
-    torch .nn. Linear (50 , 50) , torch .nn. SiLU () ,
-    torch .nn. Linear (50 , 50) , torch .nn. SiLU () ,
+    torch .nn. Linear (2, 50) , torch .nn. ReLU () ,
+    torch .nn. Linear (50 , 50) , torch .nn. ReLU () ,
+    torch .nn. Linear (50 , 50) , torch .nn. ReLU () ,
+    torch .nn. Linear (50 , 50) , torch .nn. ReLU () ,
     torch .nn. Linear (50 , 1) ,
 ).to(dev)
 
 optimizerWeak = torch.optim.Adam(NWeak.parameters(), lr =3e-4)
 J = 256 # the batch size
-nBatches = 5000
+nBatches = 10000
 
 def TrainNWeak():
     for i in range(nBatches):
-        x = (xMin + (xMax-xMin)*torch.rand(J, 1)).to(dev)
-        t = torch.rand(J, 1).to(dev) * T
+        x = (xMin + hx + (xMax-xMin-2*hx)*torch.rand(J, 1)).to(dev)
+        t = ht+torch.rand(J, 1).to(dev) * (T-2*ht)
 
         x.requires_grad_()
         t.requires_grad_()
@@ -105,7 +108,7 @@ def TrainNWeak():
 
         residual_loss = weak_residual_loss(NWeak, x, t)
 
-        loss = initial_loss + 10* residual_loss + bcleft_loss + bcright_loss
+        loss = 1 * initial_loss + 3 * residual_loss + 1 * bcleft_loss + 1 * bcright_loss
 
         #print(initial_loss, residual_loss, bcleft_loss, bcright_loss)
 
@@ -115,14 +118,22 @@ def TrainNWeak():
 def plotWeak():
     N = 1000
     x = torch.linspace(xMin, xMax, N+1).unsqueeze(1)
-    t = torch.full((N+1, ), T).unsqueeze(1)
-    print(torch.hstack((t, x)))
-    res = NWeak(torch.hstack((t, x)))
 
-    #fig, ax = plt.subplots()
-    plt.plot(x.detach().numpy(), res.detach().numpy())
-    plt.ylim(0, 1)
+    t = torch.full((N+1, ), T).unsqueeze(1)
+    res = NWeak(torch.hstack((t, x)))
+    plt.plot(x.detach().numpy(), res.detach().numpy(), label = 'T')
+
+    t = torch.full((N+1, ), T/2).unsqueeze(1)
+    res = NWeak(torch.hstack((t, x)))
+    plt.plot(x.detach().numpy(), res.detach().numpy(), label = 'T/2')
+
+    t = torch.full((N+1, ), 0).unsqueeze(1)
+    res = NWeak(torch.hstack((t, x)))
+    plt.plot(x.detach().numpy(), res.detach().numpy(), label = '0')
+
+    plt.ylim(-0.1, 1.1)
     #ax.set_ylim(0, 1)
+    plt.legend()
     plt.show()
 
 TrainNWeak()
