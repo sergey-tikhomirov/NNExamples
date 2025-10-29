@@ -3,14 +3,15 @@ import matplotlib.pyplot as plt
 import numpy as np
 from torch.autograd import grad
 
-dev = torch . device (" cuda :0" if torch . cuda . is_available () else "cpu")
+print(torch.cuda.is_available())
+dev = torch . device (" cuda :0" if torch.cuda.is_available() else "cpu")
 
 hx = 0.004
 ht = 0.004
-GL = 2
+GL = 4
 xMin = -1.0
 xMax = 1.0
-T = 0.50
+T = 1.00
 
 leftVal = 1.0
 rightVal = 0.0
@@ -19,7 +20,7 @@ rightVal = 0.0
 def flux(u: torch.Tensor) -> torch.Tensor:
     # Buckley–Leverett with Corey exponents 2, equal viscosities
     u = torch.clamp(u, 1e-6, 1.0 - 1e-6)
-    return (u**2) / (u**2 + (1 - u)**2)
+    return (u**2) / (u**2 + 1 * (1 - u)**2)
 
 # φ(ξ,τ)=(1-ξ^2)(1-τ^2) on [-1,1]^2; we need ∂x φ and ∂t φ via chain rule
 # ξ=2(x-xc)/hx, τ=2(t-tc)/ht  ⇒  ∂x φ = -4 ξ (1-τ^2)/hx,  ∂t φ = -4 τ (1-ξ^2)/ht
@@ -80,15 +81,29 @@ NWeak = torch .nn. Sequential (
     torch .nn. Linear (50 , 50) , torch .nn. ReLU () ,
     torch .nn. Linear (50 , 50) , torch .nn. ReLU () ,
     torch .nn. Linear (50 , 50) , torch .nn. ReLU () ,
+    torch .nn. Linear (50 , 50) , torch .nn. ReLU () ,
+    torch .nn. Linear (50 , 50) , torch .nn. ReLU () ,
     torch .nn. Linear (50 , 1) ,
 ).to(dev)
 
-optimizerWeak = torch.optim.Adam(NWeak.parameters(), lr =3e-4)
-J = 256 # the batch size
-nBatches = 10000
+#NWeak = torch .nn. Sequential (
+#    torch .nn. Linear (2, 50) , torch .nn. Sigmoid () ,
+#    torch .nn. Linear (50 , 50) , torch .nn. Sigmoid () ,
+#    torch .nn. Linear (50 , 50) , torch .nn. Sigmoid () ,
+#    torch .nn. Linear (50 , 50) , torch .nn. Sigmoid () ,
+#    torch .nn. Linear (50 , 1) ,
+#).to(dev)
+
+optimizerWeak = torch.optim.Adam(NWeak.parameters(), lr = 0.005)
+J = 128 # the batch size
+nBatches = 20000
+
+#4, 128, 10000 -- reasonable
 
 def TrainNWeak():
     for i in range(nBatches):
+        if i % 100 == 0:
+            print(i)
         x = (xMin + hx + (xMax-xMin-2*hx)*torch.rand(J, 1)).to(dev)
         t = ht+torch.rand(J, 1).to(dev) * (T-2*ht)
 
@@ -108,12 +123,14 @@ def TrainNWeak():
 
         residual_loss = weak_residual_loss(NWeak, x, t)
 
-        loss = 1 * initial_loss + 3 * residual_loss + 1 * bcleft_loss + 1 * bcright_loss
+        loss = 1 * initial_loss + 40 * residual_loss + 1 * bcleft_loss + 1 * bcright_loss
 
         #print(initial_loss, residual_loss, bcleft_loss, bcright_loss)
-
         loss.backward()
         optimizerWeak.step()
+
+        if (i+1) % 1000 == 0:
+            plotWeak()
 
 def plotWeak():
     N = 1000
@@ -123,9 +140,17 @@ def plotWeak():
     res = NWeak(torch.hstack((t, x)))
     plt.plot(x.detach().numpy(), res.detach().numpy(), label = 'T')
 
+    t = torch.full((N+1, ), 3*T/4).unsqueeze(1)
+    res = NWeak(torch.hstack((t, x)))
+    plt.plot(x.detach().numpy(), res.detach().numpy(), label = '3T/4')
+
     t = torch.full((N+1, ), T/2).unsqueeze(1)
     res = NWeak(torch.hstack((t, x)))
     plt.plot(x.detach().numpy(), res.detach().numpy(), label = 'T/2')
+
+    t = torch.full((N+1, ), T/4).unsqueeze(1)
+    res = NWeak(torch.hstack((t, x)))
+    plt.plot(x.detach().numpy(), res.detach().numpy(), label = 'T/4')
 
     t = torch.full((N+1, ), 0).unsqueeze(1)
     res = NWeak(torch.hstack((t, x)))
